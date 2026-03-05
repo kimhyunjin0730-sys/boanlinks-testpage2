@@ -626,7 +626,37 @@ function validate(){const e={},f=S.form;
   else if(f.msg.length>1000)e.msg='1000자 이내로 입력해주세요.';
   if(!f.agree)e.agree='개인정보 수집에 동의해주세요.';
   S.errs=e;return Object.keys(e).length===0;}
-async function submit(){if(!validate()){render();return;}S.submitting=true;render();await new Promise(r=>setTimeout(r,1200));S.submitting=false;S.submitted=true;render();toast('문의가 접수되었습니다','빠른 시일 내에 답변 드리겠습니다.');setTimeout(()=>{S.submitted=false;render();},5000);}
+async function submit() {
+  if (!validate()) { render(); return; }
+  S.submitting = true; render();
+
+  const f = S.form;
+  try {
+    const res = await fetch(
+      'https://ebmbzqmucwthwqyghzmb.supabase.co/functions/v1/send-contact',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          company: f.company, dept: f.dept, scale: f.scale, biz: f.biz,
+          name: f.name, pos: f.pos, phone: f.phone, email: f.email, msg: f.msg
+        })
+      }
+    );
+
+    const data = await res.json();
+    if (data.success) {
+      S.submitting = false; S.submitted = true; render();
+      toast('문의가 접수되었습니다', '빠른 시일 내에 답변 드리겠습니다.');
+      setTimeout(() => { S.submitted = false; render(); }, 5000);
+    } else {
+      throw new Error(data.error);
+    }
+  } catch (err) {
+    S.submitting = false; render();
+    toast('오류가 발생했습니다', '잠시 후 다시 시도해주세요.');
+  }
+}
 function bindForm(){[['fc-co','company'],['fc-dept','dept'],['fc-scale','scale'],['fc-biz','biz'],['fc-name','name'],['fc-pos','pos'],['fc-phone','phone'],['fc-email','email'],['fc-msg','msg'],['fc-agree','agree']].forEach(([id,k])=>{const el=document.getElementById(id);if(!el)return;el.addEventListener('input',()=>{S.form[k]=el.type==='checkbox'?el.checked:el.value;if(S.errs[k])delete S.errs[k];});el.addEventListener('change',()=>{S.form[k]=el.type==='checkbox'?el.checked:el.value;});});}
 
 /* ═══ 챗봇 ═══ */
