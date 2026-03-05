@@ -103,17 +103,17 @@ html{scroll-behavior:smooth;}
 .atab.on{color:var(--p);border-bottom-color:var(--p);}
 .atab:hover{color:var(--p);}
 /* Chatbot */
-#chat-btn{position:fixed;bottom:max(1.5rem,calc(1rem + env(safe-area-inset-bottom)));right:max(1.5rem,env(safe-area-inset-right));z-index:500;width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--p),#7c3aed);border:none;cursor:pointer;box-shadow:0 4px 20px rgba(37,99,235,.4);display:flex;align-items:center;justify-content:center;transition:transform .2s,box-shadow .2s;}
+#chat-btn{position:fixed;top:80px;right:max(1.5rem,env(safe-area-inset-right));z-index:500;width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--p),#7c3aed);border:none;cursor:pointer;box-shadow:0 4px 20px rgba(37,99,235,.4);display:flex;align-items:center;justify-content:center;transition:transform .2s,box-shadow .2s;}
 #chat-btn:hover{transform:scale(1.1);box-shadow:0 6px 28px rgba(37,99,235,.5);}
-#chat-window{position:fixed;bottom:max(5rem,calc(4rem + env(safe-area-inset-bottom)));right:max(1.5rem,env(safe-area-inset-right));z-index:500;width:360px;max-width:calc(100vw - 2rem);background:#fff;border-radius:1.25rem;box-shadow:0 20px 60px rgba(0,0,0,.18);border:1px solid var(--bd);display:none;flex-direction:column;overflow:hidden;animation:ddIn .22s ease;}
+#chat-window{position:fixed;top:146px;right:max(1.5rem,env(safe-area-inset-right));z-index:500;width:360px;max-width:calc(100vw - 2rem);background:#fff;border-radius:1.25rem;box-shadow:0 20px 60px rgba(0,0,0,.18);border:1px solid var(--bd);display:none;flex-direction:column;overflow:hidden;animation:ddIn .22s ease;}
 #chat-window.open{display:flex;}
 @media(max-width:480px){
-  #chat-btn{bottom:max(1rem,calc(.75rem + env(safe-area-inset-bottom)));right:max(1rem,env(safe-area-inset-right));width:52px;height:52px;}
-  #chat-window{bottom:max(4.5rem,calc(3.5rem + env(safe-area-inset-bottom)));right:.5rem;left:.5rem;width:auto;max-width:100%;border-radius:1rem;}
+  #chat-btn{top:70px;right:max(1rem,env(safe-area-inset-right));width:52px;height:52px;}
+  #chat-window{top:130px;right:.5rem;left:.5rem;width:auto;max-width:100%;border-radius:1rem;}
   #chat-msgs{max-height:55vh;}
 }
 @media(max-width:900px) and (min-width:481px){
-  #chat-window{width:340px;right:1rem;bottom:5rem;}
+  #chat-window{width:340px;right:1rem;top:146px;}
 }
 #chat-msgs{flex:1;overflow-y:auto;padding:1.25rem;display:flex;flex-direction:column;gap:.75rem;max-height:400px;}
 .chat-msg{max-width:85%;padding:.75rem 1rem;border-radius:1rem;font-size:.875rem;line-height:1.6;}
@@ -155,8 +155,8 @@ html{scroll-behavior:smooth;}
   .sol-img-col{min-height:200px!important;order:0!important;}
   .about-stats-grid{grid-template-columns:1fr 1fr!important;}
   .press-grid{grid-template-columns:1fr!important;}
-  #chat-window{width:calc(100vw - 1rem)!important;right:.5rem!important;bottom:5rem!important;}
-  #chat-btn{bottom:1rem!important;right:1rem!important;}
+  #chat-window{width:calc(100vw - 1rem)!important;right:.5rem!important;top:130px!important;bottom:auto!important;}
+  #chat-btn{top:70px!important;right:1rem!important;bottom:auto!important;}
   .mob-menu-inner{padding:.5rem!important;}
   .section-pad{padding:3rem 0!important;}
   .contact-grid{grid-template-columns:1fr!important;}
@@ -289,23 +289,23 @@ const S={path:'/',scrolled:false,mobOpen:false,famOpen:false,ddOpen:false,
   errs:{},submitting:false,submitted:false};
 
 const SOLS=[
-  {id:'boanlinks',title:'보안마켓플레이스 - Boanlinks',sub:'기업 보안 점검 및 보안 제품 매칭 서비스',color:'#2563eb',icon:null,
+  {id:'boanlinks',title:'보안마켓플레이스',sub:'기업 보안 점검 및 보안 제품 매칭 서비스',color:'#2563eb',icon:null,
     get img1(){return IMG.bl1;},get img2(){return IMG.bl2;},
     overview:'Boanlinks는 기업의 보안 점검부터 보안 제품 매칭까지 원스톱으로 제공합니다. 웹사이트·웹어플리케이션·시스템·네트워크의 취약점을 종합 점검하고 기업 환경에 맞는 최적 보안 제품을 매칭해 드립니다.',
     features:['웹사이트 악성코드를 최신 점검코드 기반으로 점검','웹어플리케이션 취약점을 OWASP TOP 10 기반으로 점검','시스템(PC) 취약점을 주요정보통신기반시설 가이드로 점검','유무선 네트워크 취약점 종합 점검','기업 환경에 맞는 보안 제품 매칭']},
-  {id:'dgo',title:'양자데이터금고시스템 - D-GO',sub:'디지털 공증 금고 · 데이터 원본 보호 플랫폼',color:'#3b5bdb',get icon(){return IMG.dgo_icon;},
+  {id:'dgo',title:'양자데이터금고시스템',sub:'디지털 공증 금고 · 데이터 원본 보호 플랫폼',color:'#3b5bdb',get icon(){return IMG.dgo_icon;},
     get img1(){return IMG.dgo1;},get img2(){return IMG.dgo2;},
     overview:'D-GO는 단순한 클라우드가 아닙니다. 복제 방지·무결성 보장·생성자 인증·원본대조필 인증을 통해 디지털 데이터를 법적 원본과 동일한 효력으로 관리하는 물리격리 기반 디지털 공증 금고입니다.',
     features:['사진·동영상·스캔본·음성 데이터 무결성 보장','SHA-256 해시·디지털 서명으로 원본 자동 공증','3단계 공증 구조: 무결성·생성자·저장소 봉인','원본대조필 인증서 자동 발급 (QR 검증 포함)','5단계 권한 관리 구조 (열람→소유권이전)']},
-  {id:'ese',title:'전사적 보안사고 예측평가시스템 - ESE',sub:'전사적 보안사고 예측평가 시스템',color:'#0891b2',icon:null,
+  {id:'ese',title:'전사적 보안사고 예측평가시스템',sub:'전사적 보안사고 예측평가 시스템',color:'#0891b2',icon:null,
     get img1(){return IMG.ese1;},get img2(){return IMG.ese2;},
     overview:"ESE는 전사적 보안 위협을 사전에 '예측'하고 그 '영향도'를 정량적으로 평가하는 시스템입니다. 방화벽이나 백신이 아닌, 기업의 '보안 건강 지수'를 진단하고 처방합니다.",
     features:['보안 위협 사전 예측 및 정량적 영향도 평가',"기업 '보안 건강 지수' 진단 및 처방",'보고서 기반 객관적 보안 의사결정 지원','지능형 보안사고 프로파일링','능동적 방어 체계 구축 지원']},
-  {id:'secuwifi',title:'보안무선공유시스템 - SECU-WIFI',sub:'동적인증기술 기반 Wi-Fi 보안·마케팅 솔루션',color:'#7c3aed',get icon(){return IMG.wifi_icon;},
+  {id:'secuwifi',title:'보안무선공유시스템',sub:'동적인증기술 기반 Wi-Fi 보안·마케팅 솔루션',color:'#7c3aed',get icon(){return IMG.wifi_icon;},
     get img1(){return IMG.wifi1;},get img2(){return IMG.wifi2;},
     overview:'SECU WI-FI는 동적 인증 기술 기반의 Wi-Fi 보안 및 마케팅 솔루션입니다. 강력한 보안과 동적 인증을 수행하며 접속 이력 분석 및 마케팅 채널로 활용할 수 있습니다.',
     features:['강력한 보안 및 동적 인증 수행','접속 이력 분석 및 통계 관리','마케팅·홍보 채널 활용','사용자 편의성 및 타 기기 연결 지원']},
-  {id:'secumom',title:'보안리스크관리시스템 - SECUMOM',sub:'보안 리스크 관리 플랫폼',color:'#059669',icon:null,
+  {id:'secumom',title:'보안리스크관리시스템',sub:'보안 리스크 관리 플랫폼',color:'#059669',icon:null,
     get img1(){return IMG.mom1;},get img2(){return IMG.mom2;},
     overview:'SECUMOM은 기업의 보안 리스크를 종합 관리하는 플랫폼입니다. 컴플라이언스 관리부터 취약점 통합 관리·보안성 심의·개인정보보호 관리까지 원스톱으로 제공합니다.',
     features:['ISMS-P 등 규제 항목 점검 및 증적 파일 통합 관리','인프라·웹·소스 취약점 점검 및 실시간 조치 현황','단계별 가이드로 보안 위험 사전 검토 및 예방','개인정보 라이프사이클 관리 및 위수탁 업체 감독','정책 신청·결재 프로세스 일원화 및 주입 자동화']},
@@ -1238,7 +1238,7 @@ function aboutHistory(){return `<div>
 /* ════════════ SOLUTION (D-GO 상세 섹션 포함) ════════════ */
 function pageSolution(){const sol=SOLS[S.tab];return `<div style="min-height:100vh;background:#f8fafc;">
   <section class="dark" class="page-section" style="padding:7rem 0 2.5rem;position:relative;background-image:linear-gradient(rgba(15,23,42,.82),rgba(15,23,42,.9)),url(https://images.unsplash.com/photo-1563986768609-322da13575f3?w=1600&q=80);background-size:cover;background-position:center;"><div class="wrap" style="text-align:center;"><span style="color:#93c5fd;font-size:.8125rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;">Solutions</span><h1 style="font-size:clamp(1.75rem,4vw,2.75rem);font-weight:900;color:#fff;margin-top:.75rem;" class="fu">AI 보안링스 솔루션</h1></div></section>
-  <div style="background:#fff;border-bottom:1px solid var(--bd);position:sticky;top:52px;z-index:40;"><div class="wrap" style="overflow-x:auto;"><div style="display:flex;min-width:max-content;">${SOLS.map((s,i)=>`<button class="stab ${S.tab===i?'on':''}" onclick="S.tab=${i};render();">${s.title}</button>`).join('')}</div></div></div>
+  <div style="background:#fff;border-bottom:1px solid var(--bd);position:sticky;top:52px;z-index:40;"><div class="wrap" style="overflow-x:auto;"><div style="display:flex;min-width:max-content;">${SOLS.map((s,i)=>`<button class="stab ${S.tab===i?'on':''}" onclick="S.tab=${i};render();">${s.title.split(' - ')[0]}</button>`).join('')}</div></div></div>
   <div class="wrap" style="padding:3.5rem 1.5rem;">
     <div class="g2 fu" style="margin-bottom:4rem;">
       <div>
