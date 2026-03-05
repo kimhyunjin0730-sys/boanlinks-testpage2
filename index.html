@@ -1238,7 +1238,7 @@ function aboutHistory(){return `<div>
 /* ════════════ SOLUTION (D-GO 상세 섹션 포함) ════════════ */
 function pageSolution(){const sol=SOLS[S.tab];return `<div style="min-height:100vh;background:#f8fafc;">
   <section class="dark" class="page-section" style="padding:7rem 0 2.5rem;position:relative;background-image:linear-gradient(rgba(15,23,42,.82),rgba(15,23,42,.9)),url(https://images.unsplash.com/photo-1563986768609-322da13575f3?w=1600&q=80);background-size:cover;background-position:center;"><div class="wrap" style="text-align:center;"><span style="color:#93c5fd;font-size:.8125rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;">Solutions</span><h1 style="font-size:clamp(1.75rem,4vw,2.75rem);font-weight:900;color:#fff;margin-top:.75rem;" class="fu">AI 보안링스 솔루션</h1></div></section>
-  <div style="background:#fff;border-bottom:1px solid var(--bd);position:sticky;top:52px;z-index:40;"><div class="wrap" style="overflow-x:auto;"><div style="display:flex;min-width:max-content;">${SOLS.map((s,i)=>`<button class="stab ${S.tab===i?'on':''}" onclick="S.tab=${i};render();">${s.title.split(' - ')[0]}</button>`).join('')}</div></div></div>
+  <div style="background:#fff;border-bottom:1px solid var(--bd);position:sticky;top:52px;z-index:40;"><div class="wrap" style="overflow-x:auto;"><div style="display:flex;min-width:max-content;">${SOLS.map((s,i)=>`<button class="stab ${S.tab===i?'on':''}" onclick="S.tab=${i};render();">${s.title.split(' - ')[1]}</button>`).join('')}</div></div></div>
   <div class="wrap" style="padding:3.5rem 1.5rem;">
     <div class="g2 fu" style="margin-bottom:4rem;">
       <div>
