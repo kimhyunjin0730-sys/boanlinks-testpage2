@@ -30,16 +30,16 @@ html{scroll-behavior:smooth;}
 .ddot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
 /* Buttons */
 .btn{display:inline-flex;align-items:center;gap:.5rem;border:none;cursor:pointer;font-family:'Pretendard',-apple-system,BlinkMacSystemFont,system-ui,sans-serif;font-weight:700;transition:all .2s;border-radius:.625rem;}
-.btn-p{background:var(--p);color:#fff;padding:.875rem 2rem;font-size:.875rem;}
-.btn-p:hover{background:var(--pd);transform:translateY(-1px);box-shadow:0 6px 20px rgba(37,99,235,.3);}
+.btn-p{background:var(--p);color:#fff;padding:.875rem 2rem;font-size:.875rem;box-shadow:0 2px 8px rgba(37,99,235,.25);}
+.btn-p:hover{background:var(--pd);transform:translateY(-2px);box-shadow:0 8px 24px rgba(37,99,235,.38);}
 .btn-w{background:#fff;color:#0f172a;padding:1rem 2.5rem;font-size:1rem;font-weight:800;border-radius:.75rem;}
 .btn-w:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(255,255,255,.25);}
 .btn-o{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.4);padding:1rem 2rem;font-size:.875rem;border-radius:.75rem;}
 .btn-o:hover{border-color:rgba(255,255,255,.8);background:rgba(255,255,255,.1);}
 .btn-dk{background:#0f172a;color:#fff;padding:.875rem 2rem;font-size:.875rem;}
 .btn-dk:hover{background:#1e293b;transform:translateY(-1px);}
-.card{background:#fff;border:1px solid var(--bd);border-radius:1rem;transition:transform .3s cubic-bezier(.22,.68,0,1.15),box-shadow .3s;}
-.card:hover{transform:translateY(-4px);box-shadow:0 12px 32px -8px rgba(37,99,235,.14);border-color:rgba(37,99,235,.22);}
+.card{background:#fff;border:1px solid var(--bd);border-radius:1rem;transition:transform .3s cubic-bezier(.22,.68,0,1.15),box-shadow .3s,border-color .3s;}
+.card:hover{transform:translateY(-5px);box-shadow:0 16px 40px -8px rgba(37,99,235,.15);border-color:rgba(37,99,235,.25);}
 .dark{background:#0f172a;color:#e2e8f0;}
 /* Hero Slider */
 .hero-slider{position:relative;width:100%;overflow:hidden;}
@@ -61,9 +61,15 @@ html{scroll-behavior:smooth;}
 .dev-card:hover{border-color:var(--p);box-shadow:0 8px 24px rgba(37,99,235,.1);transform:translateY(-3px);}
 .nstep{display:flex;gap:1rem;align-items:flex-start;padding:1.25rem;border-radius:.875rem;background:#fff;border:1px solid var(--bd);}
 /* Press */
-.press-card{background:#fff;border:1px solid var(--bd);border-radius:1rem;overflow:hidden;transition:transform .3s cubic-bezier(.22,.68,0,1.15),box-shadow .3s;cursor:pointer;}
-.press-card:hover{transform:translateY(-4px);box-shadow:0 12px 32px -8px rgba(37,99,235,.14);border-color:rgba(37,99,235,.22);}
-.press-badge{display:inline-block;padding:.25rem .625rem;border-radius:99px;font-size:.7rem;font-weight:700;letter-spacing:.04em;}
+.press-card{background:#fff;border:1px solid var(--bd);border-radius:1.125rem;overflow:hidden;transition:transform .3s cubic-bezier(.22,.68,0,1.15),box-shadow .3s,border-color .3s;cursor:pointer;}
+.press-card:hover{transform:translateY(-5px);box-shadow:0 20px 48px -8px rgba(37,99,235,.16);border-color:rgba(37,99,235,.28);}
+.press-badge{display:inline-block;padding:.25rem .7rem;border-radius:99px;font-size:.7rem;font-weight:700;letter-spacing:.04em;}
+/* Pagination */
+.pg-wrap{display:flex;align-items:center;justify-content:center;gap:.375rem;padding:3rem 0 1rem;}
+.pg-btn{min-width:40px;height:40px;border-radius:.625rem;border:1.5px solid var(--bd);background:#fff;cursor:pointer;font-size:.875rem;font-weight:700;color:#64748b;display:inline-flex;align-items:center;justify-content:center;font-family:'Pretendard',-apple-system,BlinkMacSystemFont,system-ui,sans-serif;transition:all .18s;padding:0 .5rem;}
+.pg-btn:hover:not(:disabled){border-color:var(--p);color:var(--p);background:#eff6ff;transform:translateY(-1px);}
+.pg-btn.active{background:var(--p);color:#fff;border-color:var(--p);box-shadow:0 4px 14px rgba(37,99,235,.35);}
+.pg-btn:disabled{opacity:.3;cursor:not-allowed;}
 #press-modal{position:fixed;inset:0;z-index:500;display:none;align-items:center;justify-content:center;}
 #press-modal.open{display:flex;}
 #press-backdrop{position:absolute;inset:0;background:rgba(15,23,42,.7);backdrop-filter:blur(4px);}
@@ -283,7 +289,7 @@ const IMG={
 };
 
 const S={path:'/',scrolled:false,mobOpen:false,famOpen:false,ddOpen:false,
-  tab:0,aboutTab:0,pressFilter:'all',pressModal:null,pressArticleId:null,
+  tab:0,aboutTab:0,pressFilter:'all',pressPage:1,pressModal:null,pressArticleId:null,
   heroSlide:0,chatOpen:false,chatMsgs:[],chatLoading:false,
   form:{company:'',dept:'',scale:'',biz:'',name:'',pos:'',phone:'',email:'',msg:'',agree:false},
   errs:{},submitting:false,submitted:false};
@@ -1440,13 +1446,86 @@ function pagePress(){
   const cats=['all','뉴스','보도자료','수상'];
   const filtered=S.pressFilter==='all'?PRESS:PRESS.filter(p=>p.cat===S.pressFilter);
   const cc=cat=>({'뉴스':'#2563eb','보도자료':'#059669','수상':'#d97706'}[cat]||'#64748b');
-  return `<div style="min-height:100vh;background:#f8fafc;">
-  <section class="dark" class="page-section" style="padding:7rem 0 3rem;position:relative;background-image:linear-gradient(rgba(15,23,42,.82),rgba(15,23,42,.9)),url(https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=1600&q=80);background-size:cover;background-position:center;"><div class="wrap" style="text-align:center;"><span style="color:#93c5fd;font-size:.8125rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;" class="fu">Press Center</span><h1 style="font-size:clamp(2rem,4vw,3rem);font-weight:900;color:#fff;margin-top:.75rem;" class="fu">홍보센터</h1><p style="color:rgba(226,232,240,.6);margin-top:.75rem;" class="fu">AI 보안링스의 최신 뉴스와 보도자료를 확인하세요.</p></div></section>
-  <div style="background:#fff;border-bottom:1px solid var(--bd);position:sticky;top:52px;z-index:40;"><div class="wrap" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;padding-top:.25rem;padding-bottom:.25rem;"><div style="display:flex;overflow-x:auto;">${cats.map(c=>`<button onclick="S.pressFilter='${c}';render();" style="padding:.875rem 1.25rem;font-size:.875rem;font-weight:600;background:none;border:none;border-bottom:2px solid ${S.pressFilter===c?'var(--p)':'transparent'};cursor:pointer;font-family:'Pretendard',-apple-system,BlinkMacSystemFont,system-ui,sans-serif;color:${S.pressFilter===c?'var(--p)':'#64748b'};white-space:nowrap;transition:all .2s;">${c==='all'?'전체':c}</button>`).join('')}</div><span style="font-size:.8125rem;color:#94a3b8;padding-right:.5rem;">${filtered.length}건</span></div></div>
-  <div class="wrap" style="padding:3rem 1.5rem 5rem;">
-    ${filtered.length>0?`<div class="press-card feature fu" onclick="openPress(${filtered[0].id})" class="solution-feature-grid" style="margin-bottom:2rem;display:grid;grid-template-columns:1fr 1fr;min-height:280px;overflow:hidden;"><div style="background:linear-gradient(135deg,#1e293b,#2563eb);display:flex;align-items:center;justify-content:center;padding:3rem;min-height:200px;"><svg width="80" height="80" fill="none" viewBox="0 0 24 24" stroke="rgba(255,255,255,.25)"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/></svg></div><div style="padding:2.5rem;display:flex;flex-direction:column;justify-content:center;"><div style="display:flex;gap:.5rem;align-items:center;margin-bottom:.875rem;"><span class="press-badge" style="background:${cc(filtered[0].cat)}18;color:${cc(filtered[0].cat)};">${filtered[0].cat}</span><span style="font-size:.75rem;color:#94a3b8;">최신</span></div><h2 style="font-size:1.125rem;font-weight:800;color:#0f172a;line-height:1.45;margin-bottom:.75rem;">${filtered[0].title}</h2><p style="font-size:.875rem;color:#64748b;line-height:1.7;margin-bottom:1rem;">${filtered[0].summary}</p><div style="display:flex;justify-content:space-between;align-items:center;"><div style="display:flex;gap:.75rem;"><span style="font-size:.8125rem;color:#64748b;">${filtered[0].date}</span><span style="font-size:.8125rem;color:#94a3b8;">${filtered[0].source}</span></div><span style="font-size:.8125rem;font-weight:600;color:var(--p);">자세히 보기 →</span></div></div></div>`:''}
-    <div class="g3">${filtered.slice(1).map(p=>`<div class="press-card fu" onclick="openPress(${p.id})"><div style="padding:1.5rem;"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.875rem;"><span class="press-badge" style="background:${cc(p.cat)}18;color:${cc(p.cat)};">${p.cat}</span><span style="font-size:.75rem;color:#94a3b8;">${p.date}</span></div><h3 style="font-size:.9375rem;font-weight:700;color:#0f172a;line-height:1.45;margin-bottom:.625rem;">${p.title}</h3><p style="font-size:.8125rem;color:#64748b;line-height:1.65;margin-bottom:1rem;">${p.summary.substring(0,70)}…</p><div style="display:flex;justify-content:space-between;align-items:center;"><span style="font-size:.8125rem;color:#94a3b8;">${p.source}</span><span style="font-size:.8125rem;font-weight:600;color:var(--p);">더 보기 →</span></div></div></div>`).join('')}</div>
-    ${filtered.length===0?`<div style="text-align:center;padding:5rem;color:#94a3b8;"><p>해당 카테고리의 기사가 없습니다.</p></div>`:''}
+  const PER=9;
+  const total=Math.max(1,Math.ceil(filtered.length/PER));
+  const pg=Math.min(Math.max(1,S.pressPage),total);
+  const items=filtered.slice((pg-1)*PER, pg*PER);
+  const isFirst=pg===1;
+
+  // 페이지네이션 버튼
+  function pgHtml(){
+    if(total<=1)return'';
+    const range=5,half=Math.floor(range/2);
+    let s=Math.max(1,pg-half),e=Math.min(total,s+range-1);
+    if(e-s<range-1)s=Math.max(1,e-range+1);
+    let b=`<button class="pg-btn" onclick="S.pressPage=1;render();" ${pg===1?'disabled':''}>«</button>`;
+    b+=`<button class="pg-btn" onclick="S.pressPage=${pg-1};render();" ${pg===1?'disabled':''}>‹</button>`;
+    for(let i=s;i<=e;i++)b+=`<button class="pg-btn ${i===pg?'active':''}" onclick="S.pressPage=${i};render();">${i}</button>`;
+    b+=`<button class="pg-btn" onclick="S.pressPage=${pg+1};render();" ${pg===total?'disabled':''}>›</button>`;
+    b+=`<button class="pg-btn" onclick="S.pressPage=${total};render();" ${pg===total?'disabled':''}>»</button>`;
+    return`<div class="pg-wrap">${b}</div>`;
+  }
+
+  // 개별 카드 렌더
+  const cardHtml=p=>`<div class="press-card fu" onclick="goToPress(${p.id})">
+    <div style="padding:1.5rem 1.5rem 0;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem;">
+        <span class="press-badge" style="background:${cc(p.cat)}15;color:${cc(p.cat)};">${p.cat}</span>
+        <span style="font-size:.75rem;color:#94a3b8;">${p.date||''}</span>
+      </div>
+      <h3 style="font-size:.9375rem;font-weight:700;color:#0f172a;line-height:1.5;margin-bottom:.625rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">${p.title}</h3>
+      <p style="font-size:.8125rem;color:#64748b;line-height:1.65;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">${(p.summary||'').substring(0,80)}…</p>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:.875rem 1.5rem;margin-top:.75rem;border-top:1px solid #f1f5f9;">
+      <span style="font-size:.75rem;color:#94a3b8;">${p.source||''}</span>
+      <span style="font-size:.8125rem;font-weight:700;color:var(--p);">더 보기 →</span>
+    </div>
+  </div>`;
+
+  return`<div style="min-height:100vh;background:#f8fafc;">
+  <section class="dark" style="padding:7rem 0 3rem;position:relative;background-image:linear-gradient(rgba(15,23,42,.84),rgba(15,23,42,.92)),url(https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=1600&q=80);background-size:cover;background-position:center;">
+    <div class="wrap" style="text-align:center;">
+      <span style="color:#93c5fd;font-size:.8125rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;" class="fu">Press Center</span>
+      <h1 style="font-size:clamp(2rem,4vw,3rem);font-weight:900;color:#fff;margin-top:.75rem;letter-spacing:-.02em;" class="fu">홍보센터</h1>
+      <p style="color:rgba(226,232,240,.6);margin-top:.75rem;" class="fu">AI 보안링스의 최신 뉴스와 보도자료를 확인하세요.</p>
+    </div>
+  </section>
+  <div style="background:#fff;border-bottom:1px solid var(--bd);position:sticky;top:52px;z-index:40;">
+    <div class="wrap" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;padding-top:.25rem;padding-bottom:.25rem;">
+      <div style="display:flex;overflow-x:auto;">
+        ${cats.map(c=>`<button onclick="S.pressFilter='${c}';S.pressPage=1;render();" style="padding:.875rem 1.25rem;font-size:.875rem;font-weight:600;background:none;border:none;border-bottom:2px solid ${S.pressFilter===c?'var(--p)':'transparent'};cursor:pointer;font-family:'Pretendard',-apple-system,BlinkMacSystemFont,system-ui,sans-serif;color:${S.pressFilter===c?'var(--p)':'#64748b'};white-space:nowrap;transition:all .2s;">${c==='all'?'전체':c}</button>`).join('')}
+      </div>
+      <span style="font-size:.8125rem;color:#94a3b8;padding-right:.5rem;">${filtered.length}건 · ${pg}/${total}페이지</span>
+    </div>
+  </div>
+  <div class="wrap" style="padding:3rem 1.5rem 4rem;">
+    ${items.length===0?`<div style="text-align:center;padding:5rem;color:#94a3b8;"><p>해당 카테고리의 기사가 없습니다.</p></div>`:`
+    ${isFirst&&items.length>0?`
+      <div class="press-card fu" onclick="goToPress(${items[0].id})" style="margin-bottom:2.5rem;display:grid;grid-template-columns:1fr 1fr;min-height:280px;border-radius:1.25rem;overflow:hidden;">
+        <div style="background:linear-gradient(135deg,#0f172a 0%,#1e40af 100%);display:flex;align-items:center;justify-content:center;padding:3rem;min-height:220px;position:relative;overflow:hidden;">
+          <div style="position:absolute;inset:0;opacity:.08;background-image:radial-gradient(circle,#fff 1px,transparent 1px);background-size:28px 28px;"></div>
+          <svg width="72" height="72" fill="none" viewBox="0 0 24 24" stroke="rgba(255,255,255,.3)" style="position:relative;z-index:1;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/></svg>
+        </div>
+        <div style="padding:2.5rem;display:flex;flex-direction:column;justify-content:center;background:#fff;">
+          <div style="display:flex;gap:.5rem;align-items:center;margin-bottom:1rem;">
+            <span class="press-badge" style="background:${cc(items[0].cat)}15;color:${cc(items[0].cat)};">${items[0].cat}</span>
+            <span style="font-size:.7rem;color:#94a3b8;font-weight:600;background:#f1f5f9;padding:.2rem .6rem;border-radius:99px;">최신</span>
+          </div>
+          <h2 style="font-size:1.125rem;font-weight:800;color:#0f172a;line-height:1.5;margin-bottom:.875rem;">${items[0].title}</h2>
+          <p style="font-size:.875rem;color:#64748b;line-height:1.75;margin-bottom:1.25rem;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;">${items[0].summary||''}</p>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding-top:1rem;border-top:1px solid #f1f5f9;">
+            <div style="display:flex;gap:.75rem;">
+              <span style="font-size:.8125rem;color:#64748b;">${items[0].date||''}</span>
+              <span style="font-size:.8125rem;color:#94a3b8;">${items[0].source||''}</span>
+            </div>
+            <span style="font-size:.875rem;font-weight:700;color:var(--p);">자세히 보기 →</span>
+          </div>
+        </div>
+      </div>
+      <div class="g3">${items.slice(1).map(cardHtml).join('')}</div>
+    `:`<div class="g3">${items.map(cardHtml).join('')}</div>`}
+    ${pgHtml()}
+    `}
   </div></div>`;
 }
 
