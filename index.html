@@ -311,7 +311,8 @@ const SOLS=[
     features:['ISMS-P 등 규제 항목 점검 및 증적 파일 통합 관리','인프라·웹·소스 취약점 점검 및 실시간 조치 현황','단계별 가이드로 보안 위험 사전 검토 및 예방','개인정보 라이프사이클 관리 및 위수탁 업체 감독','정책 신청·결재 프로세스 일원화 및 주입 자동화']},
 ];
 
-// 앱 시작 시 Supabase에서 기사 로딩
+
+let PRESS = [];
 const SUPABASE_URL = 'https://ebmbzqmucwthwqyghzmb.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_2OuUVX9KHgn3ah2-BHDpsw_5Rw79-tP';
 
@@ -323,19 +324,6 @@ async function loadPress() {
   return await res.json();
 }
 
-// render() 함수를 async로 변경
-async function render() {
-  window.PRESS = await loadPress();  // 전역으로 로드
-  // ... 기존 render 로직
-}
-```
-
----
-
-## 어드민 (기사 직접 등록/수정/삭제)
-
-**별도 코드 없이** Supabase 대시보드의 **Table Editor**가 바로 어드민이에요:
-```
 /* ═══ 라우팅 ═══ */
 function getPath(){const h=window.location.hash;if(!h||h==='#'||h==='#/')return'/';return h.replace(/^#/,'').split('?')[0]||'/';}
 function go(path){const c=getPath();window.location.hash=path;if(c===path){S.path=path;render();window.scrollTo(0,0);}closeDd();if(S.mobOpen)toggleMob();}
@@ -1517,7 +1505,12 @@ function pageContact(){if(S.submitted)return`<div style="min-height:100vh;backgr
 
 function page404(){return`<div style="min-height:80vh;display:flex;align-items:center;justify-content:center;text-align:center;"><div><h1 style="font-size:4rem;font-weight:900;color:#0f172a;">404</h1><p style="color:#64748b;margin:.75rem 0 1.5rem;">페이지를 찾을 수 없습니다</p><button onclick="go('/')" class="btn btn-p">홈으로 돌아가기</button></div></div>`;}
 
-window.addEventListener('load',()=>{S.path=getPath();render();handleResize();});
+window.addEventListener('load', async ()=>{
+  PRESS = await loadPress();
+  S.path=getPath();
+  render();
+  handleResize();
+});
 new MutationObserver(()=>{bindForm();bindChat();}).observe(document.getElementById('app'),{childList:true,subtree:false});
 
 </script>
