@@ -997,31 +997,33 @@ function pageHome(){
     </div>`;
   }).join('');
 
-  const cards = SOLS.map((s, i) => {
+const cards = SOLS.map((s, i) => {
     const even = i % 2 === 0;
     return `<div style="background:var(--surface,#fff);border:1px solid rgba(226,232,240,0.8);border-radius:1.5rem;overflow:hidden;margin-bottom:2.5rem;box-shadow:var(--shadow-sm, 0 4px 12px rgba(15,23,42,0.03));transition:all 0.4s cubic-bezier(0.16,1,0.3,1);" class="fu card-hover-effect" onmouseover="this.style.transform='translateY(-6px)';this.style.boxShadow='var(--shadow-hover, 0 20px 40px rgba(37,99,235,0.12))';this.style.borderColor='rgba(37,99,235,0.25)';" onmouseout="this.style.transform='';this.style.boxShadow='';this.style.borderColor='rgba(226,232,240,0.8)';">
       <div class="g2" style="gap:0;min-height:320px;">
         
-      <div style="order:${even ? 1 : 0};padding:3rem 2.5rem;display:flex;flex-direction:column;justify-content:center;">
+        <div style="order:${even ? 0 : 1};position:relative;overflow:hidden;min-height:280px;height:100%;">
+          <img src="${s.img1}" alt="${s.title}" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;transition:transform 0.8s cubic-bezier(0.16,1,0.3,1);display:block;" onmouseover="this.style.transform='scale(1.06)'" onmouseout="this.style.transform=''">
+          <div style="position:absolute;inset:0;background:linear-gradient(to ${even ? 'right' : 'left'},rgba(15,23,42,.4),transparent 65%);pointer-events:none;z-index:1;"></div>
           
-          <div style="display:inline-block;background:${s.color}15;color:${s.color};font-size:.75rem;font-weight:800;padding:.35rem .875rem;border-radius:99px;margin-bottom:1rem;width:fit-content;letter-spacing:0.03em;">
+          <div style="position:absolute;top:1.25rem;${even ? 'left' : 'right'}:1.25rem;background:${s.color}e6;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:#fff;font-size:.75rem;font-weight:700;padding:.4rem 1rem;border-radius:99px;z-index:2;box-shadow:0 4px 12px ${s.color}40;letter-spacing:0.02em;">
+            ${s.title}
+          </div>
+          
+          ${s.icon ? `<div style="position:absolute;bottom:1.25rem;${even ? 'right' : 'left'}:1.25rem;background:rgba(255,255,255,.15);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.3);border-radius:1rem;padding:.6rem;z-index:2;box-shadow:0 8px 24px rgba(0,0,0,0.2);"><img src="${s.icon}" style="width:40px;height:40px;object-fit:contain;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.1));"></div>` : ''}
+        </div>
+        
+        <div style="order:${even ? 1 : 0};padding:3rem 2.5rem;display:flex;flex-direction:column;justify-content:center;">
+          
+          <div style="display:inline-block;background:${s.color}15;color:${s.color};font-size:.75rem;font-weight:800;padding:.35rem .875rem;border-radius:99px;margin-bottom:1.25rem;width:fit-content;letter-spacing:0.03em;">
             ${s.eng}
           </div>
           
-          <h2 style="font-size:1.75rem;font-weight:900;color:var(--text-main,#1e293b);margin-bottom:.35rem;letter-spacing:-0.02em;">
-            ${s.title}
-          </h2>
-          
-          <h3 style="font-size:1.1rem;font-weight:700;color:var(--text-sub,#64748b);margin-bottom:1.25rem;line-height:1.4;letter-spacing:-0.01em;">
-            ${s.sub}
-          </h3>
-          
-          <p style="font-size:.9375rem;color:#475569;line-height:1.7;margin-bottom:1.75rem;">
-            ${s.overview.substring(0, 90)}…
-          </p>
+          <h3 style="font-size:1.35rem;font-weight:800;color:var(--text-main,#1e293b);margin-bottom:.75rem;line-height:1.4;letter-spacing:-0.01em;">${s.sub}</h3>
+          <p style="font-size:.9375rem;color:var(--text-sub,#64748b);line-height:1.7;margin-bottom:1.75rem;">${s.overview.substring(0, 90)}…</p>
           
           <ul style="display:flex;flex-direction:column;gap:.5rem;margin-bottom:2rem;">
-            ${s.features.slice(0, 3).map(f => `<li style="font-size:.875rem;color:#475569;display:flex;align-items:flex-start;gap:.6rem;list-style:none;"><span style="color:${s.color};flex-shrink:0;font-weight:800;font-size:1rem;line-height:1.2;">✓</span>${f}</li>`).join('')}
+            ${s.features.slice(0, 3).map(f => `<li style="font-size:.875rem;color:#475569;display:flex;align-items:flex-start;gap:.6rem;list-style:none;"><span style="color:${s.color};flex-shrink:0;font-weight:700;font-size:1rem;line-height:1.2;">✓</span>${f}</li>`).join('')}
           </ul>
           
           <button onclick="goSol(${i})" style="display:inline-flex;align-items:center;gap:.5rem;color:${s.color};font-size:.9375rem;font-weight:700;background:none;border:none;cursor:pointer;padding:0;font-family:inherit;width:fit-content;transition:opacity 0.2s;" onmouseover="this.style.opacity='0.8'; this.querySelector('svg').style.transform='translateX(6px)'" onmouseout="this.style.opacity='1'; this.querySelector('svg').style.transform=''">
