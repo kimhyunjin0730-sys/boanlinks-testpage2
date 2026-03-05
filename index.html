@@ -636,7 +636,9 @@ async function submit() {
       'https://ebmbzqmucwthwqyghzmb.supabase.co/functions/v1/hyper-service',
       {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json'
+          },
+
         body: JSON.stringify({
           company: f.company, dept: f.dept, scale: f.scale, biz: f.biz,
           name: f.name, pos: f.pos, phone: f.phone, email: f.email, msg: f.msg
