@@ -1,0 +1,20 @@
+name: Crawl Jinnhyun Press
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # 매일 오전 9시 (UTC 0시)
+  workflow_dispatch:       # 수동 실행도 가능
+
+jobs:
+  crawl:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - run: npm install node-fetch cheerio @supabase/supabase-js
+      - run: node scripts/crawl.js
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
