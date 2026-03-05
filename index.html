@@ -633,10 +633,11 @@ async function submit() {
   const f = S.form;
   try {
     const res = await fetch(
-      'https://ebmbzqmucwthwqyghzmb.supabase.co/functions/v1/hyper-service',
+      'https://ebmbzqmucwthwqyghzmb.supabase.co/functions/v1/swift-service',
       {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json'
+        headers: { 'Content-Type': 'application/json',
+              'Authorization': `Bearer ${SUPABASE_KEY}`, 
           },
 
         body: JSON.stringify({
