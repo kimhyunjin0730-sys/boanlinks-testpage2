@@ -25,14 +25,25 @@ export async function fetchPressById(id: number): Promise<Press | null> {
 }
 
 export async function submitContact(input: ContactInput): Promise<void> {
-  const { error: insertErr } = await supabase.from('contacts').insert(input);
-  if (insertErr) throw insertErr;
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  if (!url) throw new Error('Missing NEXT_PUBLIC_SUPABASE_URL');
 
-  const { error: fnErr } = await supabase.functions.invoke('send-contact-email', {
-    body: input,
+  const payload = {
+    company: input.company,
+    biz: input.biz,
+    namepos: input.pos ? `${input.name} / ${input.pos}` : input.name,
+    phone: input.phone,
+    email: input.email,
+    msg: input.msg,
+  };
+
+  const res = await fetch(`${url}/functions/v1/swift-service`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
   });
-  if (fnErr) {
-    // DB succeeded; log but do not throw — user gets success, team may not receive email
-    console.warn('Edge Function send-contact-email failed:', fnErr);
+  const data = await res.json().catch(() => ({}));
+  if (!data.success) {
+    throw new Error(data.error || `Request failed (${res.status})`);
   }
 }
