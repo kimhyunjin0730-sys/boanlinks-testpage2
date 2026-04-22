@@ -3,6 +3,7 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { ToastProvider } from '@/components/ToastProvider';
 import { HashRedirect } from '@/components/HashRedirect';
+import { Chatbot } from '@/components/Chatbot';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -26,6 +27,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Header />
           <main>{children}</main>
           <Footer />
+          <Chatbot />
         </ToastProvider>
       </body>
     </html>
