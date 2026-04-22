@@ -89,7 +89,7 @@ boanlinks-testpage2/
 │   ├── api.ts                       # fetchPress, submitContact
 │   └── utils.ts                     # cn() 등
 ├── data/
-│   ├── solutions.ts                 # 6개 솔루션 정적 데이터
+│   ├── solutions.ts                 # 5개 솔루션 정적 데이터 (boanlinks, dgo, ese, secuwifi, secumom)
 │   ├── heroSlides.ts
 │   ├── milestones.ts                # 연혁
 │   └── chatbotReplies.ts            # Q&A 매칭 규칙
@@ -295,7 +295,7 @@ export default {
 ### Phase 2 — 정적 페이지 이식 (디자인 파리티)
 - `Home` (HeroSlider, Intro, Solutions preview, Partner, Press preview, CTA)
 - `About` (overview, stats, 연혁, 파트너, 인증)
-- `Solution` + `Solution [id]` (6개 솔루션)
+- `Solution` + `Solution [id]` (5개 솔루션)
 - Tailwind 유틸리티로 인라인 스타일 전량 치환
 - **체크포인트:** 기존 사이트와 시각적으로 동일 (스크린샷 비교)
 
