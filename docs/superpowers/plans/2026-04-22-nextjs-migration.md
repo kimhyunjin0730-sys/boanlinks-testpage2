@@ -6,7 +6,12 @@
 
 **Architecture:** Fresh Next.js 15 App Router project. Legacy files move to `legacy/` (preserved for reference). Flat folder structure with `app/`, `components/`, `hooks/`, `lib/`, `data/`, `types/`. Server components by default; `'use client'` only for interactive components. Supabase is accessed server-side in Press pages and client-side in Contact/Chatbot.
 
-**Tech Stack:** Next.js 15, React 18, TypeScript 5, Tailwind CSS 3, `@supabase/supabase-js`, Vitest + React Testing Library. Vercel hosting with `boanlinks.com` custom domain. Existing GitHub Actions crawler (`crawl.yml` + `scripts/crawl.js`) unchanged.
+**Tech Stack:** Next.js 16, React 19, TypeScript 5, Tailwind CSS 4 (CSS-first `@theme`), `@supabase/supabase-js`, Vitest + React Testing Library. Vercel hosting with `boanlinks.com` custom domain. Existing GitHub Actions crawler (`crawl.yml` + `scripts/crawl.js`) unchanged.
+
+**Environment notes:**
+- Dev server uses `next dev --webpack` (not Turbopack) because Turbopack panics on Korean characters in the filesystem path (`진앤현시큐리티`, `바탕 화면`).
+- No `tailwind.config.ts` file exists. All theme configuration lives in `app/globals.css` via Tailwind v4's `@theme` directive.
+- `next.config.ts` (not `.mjs`) is the config file — create-next-app v16 default.
 
 **Priority:** Visual/feature parity with legacy site. Internal code can be cleaner than the legacy template-literal rendering — the goal is modernization, not literal translation.
 
@@ -152,122 +157,99 @@ git commit -m "feat: scaffold Next.js 15 + TypeScript + Tailwind app"
 
 ---
 
-### Task 3: Configure Tailwind theme with legacy tokens
+### Task 3: Configure Tailwind v4 theme with legacy tokens
 
 **Files:**
-- Modify: `tailwind.config.ts`
-- Modify: `app/globals.css`
-- Modify: `app/layout.tsx` (font preload)
+- Modify: `app/globals.css` (single source of Tailwind config via `@theme`)
+- Modify: `app/layout.tsx` (remove Geist font; use Pretendard CDN; update metadata)
+- Modify: `app/page.tsx` (minimal placeholder)
+- Delete (if present): `tailwind.config.ts` — Tailwind v4 does not use a JS config file
 
-- [ ] **Step 1: Replace `tailwind.config.ts` with theme tokens**
+> **Tailwind v4 recap:** colors, fonts, and animations are registered via the `@theme` directive in `globals.css`. Tokens named `--color-*`, `--font-*`, `--animate-*` become utility classes automatically (`bg-primary`, `font-sans`, `animate-fade-up`). Keyframes are plain CSS `@keyframes` blocks. There is no `content: []` array — v4 auto-detects usage.
 
-Write `tailwind.config.ts`:
-
-```ts
-import type { Config } from 'tailwindcss';
-
-const config: Config = {
-  content: [
-    './app/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
-    './hooks/**/*.{ts,tsx}',
-    './data/**/*.{ts,tsx}',
-  ],
-  theme: {
-    extend: {
-      colors: {
-        primary: {
-          DEFAULT: '#2563eb',
-          dark: '#1d4ed8',
-          400: '#3b82f6',
-          300: '#93c5fd',
-        },
-        navy: '#0f172a',
-        slate850: '#1e293b',
-        cyan300: '#67e8f9',
-        emerald400: '#34d399',
-        emerald200: '#a7f3d0',
-        border: '#e2e8f0',
-      },
-      fontFamily: {
-        sans: ['Pretendard', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'sans-serif'],
-      },
-      keyframes: {
-        fadeUp: {
-          '0%': { opacity: '0', transform: 'translateY(22px)' },
-          '100%': { opacity: '1', transform: 'translateY(0)' },
-        },
-        floatY: {
-          '0%,100%': { transform: 'translateY(0)' },
-          '50%': { transform: 'translateY(-7px)' },
-        },
-        pGlow: {
-          '0%,100%': { boxShadow: '0 0 0 0 rgba(37,99,235,.3)' },
-          '50%': { boxShadow: '0 0 0 10px rgba(37,99,235,0)' },
-        },
-        pulseGreen: {
-          '0%,100%': { boxShadow: '0 0 0 0 rgba(16,185,129,.4)' },
-          '50%': { boxShadow: '0 0 0 10px rgba(16,185,129,0)' },
-        },
-        scaleIn: {
-          '0%': { opacity: '0', transform: 'scale(.95)' },
-          '100%': { opacity: '1', transform: 'scale(1)' },
-        },
-        scrollBounce: {
-          '0%,100%': { transform: 'translateY(0)' },
-          '50%': { transform: 'translateY(5px)' },
-        },
-        chatIn: {
-          '0%': { opacity: '0', transform: 'translateY(-8px)' },
-          '100%': { opacity: '1', transform: 'translateY(0)' },
-        },
-        bounceDot: {
-          '0%,80%,100%': { transform: 'translateY(0)' },
-          '40%': { transform: 'translateY(-6px)' },
-        },
-        ddIn: {
-          '0%': { opacity: '0', transform: 'translateY(-6px)' },
-          '100%': { opacity: '1', transform: 'translateY(0)' },
-        },
-        shake: {
-          '10%,90%': { transform: 'translateX(-1px)' },
-          '20%,80%': { transform: 'translateX(2px)' },
-          '30%,50%,70%': { transform: 'translateX(-4px)' },
-          '40%,60%': { transform: 'translateX(4px)' },
-        },
-        spin: {
-          to: { transform: 'rotate(360deg)' },
-        },
-      },
-      animation: {
-        'fade-up': 'fadeUp .7s ease both',
-        'float-y': 'floatY 3s ease-in-out infinite',
-        'p-glow': 'pGlow 2s ease-in-out infinite',
-        'pulse-green': 'pulseGreen 2s ease-in-out infinite',
-        'scale-in': 'scaleIn .3s ease both',
-        'scroll-bounce': 'scrollBounce 1.5s ease-in-out infinite',
-        'chat-in': 'chatIn .25s ease both',
-        'bounce-dot': 'bounceDot 1.4s ease-in-out infinite',
-        'dd-in': 'ddIn .18s ease both',
-        shake: 'shake .4s linear',
-        spin: 'spin 1s linear infinite',
-      },
-    },
-  },
-  plugins: [],
-};
-
-export default config;
-```
-
-- [ ] **Step 2: Replace `app/globals.css` with Tailwind directives + legacy global styles**
+- [ ] **Step 1: Replace `app/globals.css` with the full v4 theme + keyframes + base/components/utilities layers**
 
 Write `app/globals.css`:
 
 ```css
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  /* Colors (primary + palette) */
+  --color-primary: #2563eb;
+  --color-primary-dark: #1d4ed8;
+  --color-primary-400: #3b82f6;
+  --color-primary-300: #93c5fd;
+  --color-navy: #0f172a;
+  --color-slate-850: #1e293b;
+  --color-cyan-300: #67e8f9;
+  --color-emerald-400: #34d399;
+  --color-emerald-200: #a7f3d0;
+  --color-border: #e2e8f0;
+
+  /* Font */
+  --font-sans: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+
+  /* Animations */
+  --animate-fade-up: fadeUp 0.7s ease both;
+  --animate-float-y: floatY 3s ease-in-out infinite;
+  --animate-p-glow: pGlow 2s ease-in-out infinite;
+  --animate-pulse-green: pulseGreen 2s ease-in-out infinite;
+  --animate-scale-in: scaleIn 0.3s ease both;
+  --animate-scroll-bounce: scrollBounce 1.5s ease-in-out infinite;
+  --animate-chat-in: chatIn 0.25s ease both;
+  --animate-bounce-dot: bounceDot 1.4s ease-in-out infinite;
+  --animate-dd-in: ddIn 0.18s ease both;
+  --animate-shake: shake 0.4s linear;
+  --animate-spin: spin 1s linear infinite;
+}
+
+/* Keyframes — referenced by the `--animate-*` tokens above */
+@keyframes fadeUp {
+  0% { opacity: 0; transform: translateY(22px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes floatY {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-7px); }
+}
+@keyframes pGlow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.3); }
+  50% { box-shadow: 0 0 0 10px rgba(37, 99, 235, 0); }
+}
+@keyframes pulseGreen {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+  50% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+}
+@keyframes scaleIn {
+  0% { opacity: 0; transform: scale(0.95); }
+  100% { opacity: 1; transform: scale(1); }
+}
+@keyframes scrollBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(5px); }
+}
+@keyframes chatIn {
+  0% { opacity: 0; transform: translateY(-8px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes bounceDot {
+  0%, 80%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-6px); }
+}
+@keyframes ddIn {
+  0% { opacity: 0; transform: translateY(-6px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes shake {
+  10%, 90% { transform: translateX(-1px); }
+  20%, 80% { transform: translateX(2px); }
+  30%, 50%, 70% { transform: translateX(-4px); }
+  40%, 60% { transform: translateX(4px); }
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
 
 @layer base {
   *, *::before, *::after {
@@ -328,6 +310,14 @@ Write `app/globals.css`:
     background-clip: text;
   }
 }
+```
+
+> **Note on the `border` token:** Tailwind v4 uses `--color-border` for the generic `border` utility. We override it with our legacy `#e2e8f0` value, so `border-border` works throughout the plan as written.
+
+- [ ] **Step 2: Delete any `tailwind.config.ts` if present** (v4 does not use it)
+
+```bash
+rm -f tailwind.config.ts tailwind.config.js
 ```
 
 - [ ] **Step 3: Update `app/layout.tsx` to load Pretendard font and set root metadata**

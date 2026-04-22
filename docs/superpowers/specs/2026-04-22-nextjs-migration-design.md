@@ -30,10 +30,10 @@
 
 | Layer | Tech |
 |---|---|
-| Framework | Next.js 15 (App Router) |
+| Framework | Next.js 16 (App Router) |
 | Language | TypeScript 5 |
-| UI | React 18 |
-| Styling | Tailwind CSS 3 (+ `clsx`, `tailwind-merge`) |
+| UI | React 19 |
+| Styling | Tailwind CSS 4 (CSS-based `@theme` config) + `clsx`, `tailwind-merge` |
 | Data | `@supabase/supabase-js` |
 | Forms/Validation | 내장 훅 + 기존 검증 로직 재사용 (zod/react-hook-form 불채용) |
 | State | React 내장 (`useState`, `useContext`) |
@@ -215,11 +215,14 @@ export type Milestone = {
 
 ## 8. Styling
 
-### Tailwind 설정 (`tailwind.config.ts`)
+### Tailwind 설정 (`app/globals.css` — v4 CSS-first)
 
-- **Colors:** primary `#3b82f6`, 다크 배경 `#0f172a`, `#1e293b`, accents `#67e8f9`, `#93c5fd`, `#34d399`, `#a7f3d0` 등 기존 팔레트 테마화
-- **Font:** Pretendard CDN 링크는 `app/layout.tsx` 의 `<head>` 에서 로드, `fontFamily.sans` 에 등록
-- **Custom Animations:** 기존 `index.html` 의 keyframes 이식 — `fadeUp` (`.fu`), `floatY`, `pGlow`, `pulse-green`, `scaleIn`, `scrollBounce`, `chatIn`, `bounce`, `ddIn`, `spin`. `@layer utilities` 에 등록하거나 `tailwind.config.ts` 의 `theme.extend.keyframes` / `animation` 에 이식
+Tailwind v4 는 JS config 파일(`tailwind.config.ts`) 이 없음. 모든 테마 정의를 CSS 의 `@theme` 디렉티브로 수행.
+
+- **Colors:** `@theme { --color-primary: ...; --color-navy: ...; }` 로 등록 → `bg-primary`, `text-navy` 등 유틸리티 자동 생성
+- **Font:** Pretendard CDN 링크는 `app/layout.tsx` 의 `<head>` 에서 로드, `@theme { --font-sans: 'Pretendard', ...; }` 등록
+- **Keyframes:** 기존 index.html 의 keyframes (fadeUp, floatY, pGlow, pulseGreen, scaleIn, scrollBounce, chatIn, bounceDot, ddIn, shake, spin) 을 CSS `@keyframes` 로 직접 정의
+- **Animations:** `@theme { --animate-fade-up: fadeUp .7s ease both; ... }` 로 등록 → `animate-fade-up` 등 자동 생성
 
 ### 변환 원칙
 
