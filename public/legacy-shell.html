@@ -1256,7 +1256,7 @@ const IMG={
 };
 
 const S={path:'/',scrolled:false,mobOpen:false,famOpen:false,ddOpen:false,
-  tab:0,aboutTab:0,pressFilter:'all',pressPage:1,pressModal:null,pressArticleId:null,
+  tab:0,aboutTab:0,pressFilter:'all',pressPage:1,pressSort:'desc',pressYear:'all',pressModal:null,pressArticleId:null,
   heroSlide:0,chatOpen:false,chatMsgs:[],chatLoading:false,
   form:{company:'',biz:'',namepos:'',phone:'',email:'',msg:'',agree:false},
   errs:{},submitting:false,submitted:false};
@@ -2668,7 +2668,14 @@ function pagePressArticle(){
 /* ════════════ PRESS ════════════ */
 function pagePress(){
   const cats=['all','뉴스','보도자료','수상'];
-  const filtered=S.pressFilter==='all'?PRESS:PRESS.filter(p=>p.cat===S.pressFilter);
+  // 카테고리 + 연도 + 정렬 필터 적용
+  const years=Array.from(new Set(PRESS.map(p=>(p.date||'').slice(0,4)).filter(Boolean))).sort((a,b)=>b.localeCompare(a));
+  let filtered = S.pressFilter==='all' ? PRESS.slice() : PRESS.filter(p=>p.cat===S.pressFilter);
+  if(S.pressYear!=='all') filtered = filtered.filter(p=>(p.date||'').slice(0,4)===S.pressYear);
+  filtered.sort((a,b)=>{
+    const cmp = (a.date||'').localeCompare(b.date||'');
+    return S.pressSort==='asc' ? cmp : -cmp;
+  });
   const cc=cat=>({'뉴스':'#2563eb','보도자료':'#059669','수상':'#d97706'}[cat]||'#64748b');
   const PER=9;
   const total=Math.max(1,Math.ceil(filtered.length/PER));
@@ -2716,11 +2723,24 @@ function pagePress(){
     </div>
   </section>
   <div style="background:#fff;border-bottom:1px solid var(--bd);position:sticky;top:52px;z-index:40;">
-    <div class="wrap" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;padding-top:.25rem;padding-bottom:.25rem;">
+    <div class="wrap" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem;padding-top:.25rem;padding-bottom:.25rem;">
       <div style="display:flex;overflow-x:auto;">
         ${cats.map(c=>`<button onclick="S.pressFilter='${c}';S.pressPage=1;render();" style="padding:.875rem 1.25rem;font-size:.875rem;font-weight:600;background:none;border:none;border-bottom:2px solid ${S.pressFilter===c?'var(--p)':'transparent'};cursor:pointer;font-family:'Pretendard',-apple-system,BlinkMacSystemFont,system-ui,sans-serif;color:${S.pressFilter===c?'var(--p)':'#64748b'};white-space:nowrap;transition:all .2s;">${c==='all'?'전체':c}</button>`).join('')}
       </div>
-      <span style="font-size:.8125rem;color:#4b5563;padding-right:.5rem;">${filtered.length}건 · ${pg}/${total}페이지</span>
+      <div style="display:flex;align-items:center;gap:.625rem;flex-wrap:wrap;padding:.4rem .5rem .4rem 0;">
+        <label style="display:inline-flex;align-items:center;gap:.4rem;font-size:.75rem;color:#475569;font-weight:600;">
+          <span>연도</span>
+          <select onchange="S.pressYear=this.value;S.pressPage=1;render();" style="font-family:inherit;font-size:.8125rem;font-weight:600;color:#0f172a;background:#fff;border:1px solid #e2e8f0;border-radius:.5rem;padding:.4rem .65rem;cursor:pointer;">
+            <option value="all" ${S.pressYear==='all'?'selected':''}>전체</option>
+            ${years.map(y=>`<option value="${y}" ${S.pressYear===y?'selected':''}>${y}년</option>`).join('')}
+          </select>
+        </label>
+        <div role="group" aria-label="정렬" style="display:inline-flex;border:1px solid #e2e8f0;border-radius:.5rem;overflow:hidden;">
+          <button onclick="S.pressSort='desc';render();" aria-pressed="${S.pressSort==='desc'}" style="font-family:inherit;font-size:.75rem;font-weight:700;padding:.4rem .75rem;border:none;cursor:pointer;background:${S.pressSort==='desc'?'var(--p)':'#fff'};color:${S.pressSort==='desc'?'#fff':'#475569'};transition:all .15s;">최신순</button>
+          <button onclick="S.pressSort='asc';render();" aria-pressed="${S.pressSort==='asc'}" style="font-family:inherit;font-size:.75rem;font-weight:700;padding:.4rem .75rem;border:none;border-left:1px solid #e2e8f0;cursor:pointer;background:${S.pressSort==='asc'?'var(--p)':'#fff'};color:${S.pressSort==='asc'?'#fff':'#475569'};transition:all .15s;">오래된순</button>
+        </div>
+        <span style="font-size:.8125rem;color:#4b5563;">${filtered.length}건 · ${pg}/${total}p</span>
+      </div>
     </div>
   </div>
   <div class="wrap" style="padding:3rem 1.5rem 4rem;">
