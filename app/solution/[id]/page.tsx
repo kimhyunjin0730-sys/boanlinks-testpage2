@@ -90,15 +90,6 @@ export default async function SolutionDetailPage({
             >
               도입 문의하기
             </Link>
-            {hasBrochure && solution.brochure?.pdfUrl && (
-              <PdfViewer
-                pdfUrl={solution.brochure.pdfUrl}
-                slideImages={solution.brochure.slideImages}
-                downloadName={`${solution.eng}-소개서.pdf`}
-                triggerLabel="소개서 보기 (PDF)"
-                triggerClassName="inline-flex items-center justify-center gap-2 rounded-[.625rem] bg-white/10 text-white border border-white/30 px-6 py-3 text-sm font-semibold transition-all hover:bg-white/20 hover:-translate-y-[1px]"
-              />
-            )}
           </div>
         </div>
       </section>
@@ -158,7 +149,7 @@ export default async function SolutionDetailPage({
                 pdfUrl={solution.brochure.pdfUrl}
                 slideImages={solution.brochure.slideImages}
                 downloadName={`${solution.eng}-소개서.pdf`}
-                triggerLabel="소개서 다시 보기 (PDF)"
+                triggerLabel="소개서 보기 (PDF)"
               />
             )}
             <Link
