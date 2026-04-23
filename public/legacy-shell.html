@@ -1742,8 +1742,14 @@ function bindChat(){
 }
 
 /* ═══ 홍보센터 모달 ═══ */
-function openPress(id){S.pressArticleId=id;go('/press-article');}
-function goToPress(id){S.pressArticleId=id;go('/press-article');}
+// 프레스 카드 클릭 시: origin_url(원문 기사 링크)이 있으면 새 탭으로 외부 원문 열기,
+// 없으면 내부 상세 페이지로 폴백. 사용자가 "속의 뉴스를 끌고 와야" 한다고 요청한 동작.
+function openPress(id){
+  const p=PRESS.find(x=>x.id===id);
+  if(p && p.origin_url){ window.open(p.origin_url,'_blank','noopener,noreferrer'); return; }
+  S.pressArticleId=id; go('/press-article');
+}
+function goToPress(id){ openPress(id); }
 function closePress(){document.getElementById('press-modal').classList.remove('open');document.body.style.overflow='';S.pressModal=null;}
 document.getElementById('press-backdrop').addEventListener('click',closePress);
 function renderPressModal(){const p=S.pressModal;if(!p)return;const cc={'뉴스':'#2563eb','보도자료':'#059669','수상':'#d97706'}[p.cat]||'#64748b';document.getElementById('press-box').innerHTML=`<div style="padding:2rem;"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.5rem;"><div><span class="press-badge" style="background:${cc}18;color:${cc};margin-bottom:.625rem;display:inline-block;">${p.cat}</span><h2 style="font-size:1.25rem;font-weight:600;color:#0f172a;line-height:1.4;">${p.title}</h2><div style="display:flex;gap:1rem;margin-top:.5rem;"><span style="font-size:.8125rem;color:#374151;">${p.date}</span><span style="font-size:.8125rem;color:#4b5563;">출처: ${p.source}</span></div></div><button onclick="closePress()" style="background:none;border:none;cursor:pointer;padding:.25rem;flex-shrink:0;margin-left:1rem;"><svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="#64748b"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button></div><div style="border-top:1px solid var(--bd);padding-top:1.5rem;"><p style="font-size:.9375rem;color:#1f2937;line-height:1.85;white-space:pre-line;">${p.content}</p></div><div style="margin-top:2rem;padding-top:1.25rem;border-top:1px solid var(--bd);display:flex;justify-content:flex-end;"><button onclick="closePress()" class="btn btn-p" style="padding:.75rem 1.5rem;">닫기</button></div></div>`;}
