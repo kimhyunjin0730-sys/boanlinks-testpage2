@@ -6,8 +6,8 @@
 <title>AI 보안링스 - Boanlinks</title>
 <meta name="description" content="기업의 보안 파트너, AI 보안링스"/>
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
-<link rel="preload" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"></noscript>
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"></noscript>
 <style>
 /* =====================================================
    보안링스 (Boanlinks) — 스타일 수정본
@@ -41,7 +41,7 @@
   --warn: #d97706;
 
   /* Layout */
-  --header-h: 60px;
+  --header-h: 72px;
   --radius-sm: .625rem;
   --radius: 1rem;
   --radius-lg: 1.5rem;
@@ -93,15 +93,25 @@
 /* ── 1. 한국어 전역 줄 끊김 방지 ── */
 /* keep-all: 단어 단위로만 줄바꿈 (한글 음절 중간에서 끊기지 않음) */
 body {
-  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-  background: #f8fafc;
+  font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  background: #ffffff;
   color: #0f172a;
+  font-feature-settings: 'ss01', 'ss02';
+  padding-top: var(--header-h);
 
   /* ✅ 핵심 수정: 한국어 줄 끊김 방지 */
   word-break: keep-all;
   overflow-wrap: break-word;
   line-height: 1.7; /* 기본 줄간격 향상 */
 }
+/* phabios-style heavy headlines: dense modern grotesk feel */
+h1, .h1, h2, .h2 {
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  line-height: 1.18;
+}
+h3, .h3 { font-weight: 700; letter-spacing: -0.018em; line-height: 1.3; }
+h4, .h4 { font-weight: 700; letter-spacing: -0.012em; }
 
 * { font-family: inherit; }
 
@@ -134,36 +144,54 @@ pre, code, .url-text {
 /* ───────────────────────────────────────
    Header
 ─────────────────────────────────────── */
+/* phabios-style header: always solid white, bold nav, generous height */
 #hdr {
   position: fixed;
   top: 0; left: 0; right: 0;
   z-index: 200;
-  transition: all .3s;
-  padding: 1rem 0;
+  transition: box-shadow .25s ease;
+  padding: .65rem 0;
+  background: #ffffff;
+  border-bottom: 1px solid #eef0f4;
 }
 #hdr.solid {
-  background: rgba(255, 255, 255, .97);
-  backdrop-filter: blur(14px);
-  border-bottom: 1px solid var(--bd);
-  box-shadow: 0 1px 10px rgba(0,0,0,.07);
+  background: #ffffff;
+  border-bottom: 1px solid #eef0f4;
+  box-shadow: 0 1px 8px rgba(15,23,42,.05);
   padding: .5rem 0;
 }
 
-#hdr-logo { height: 4.8rem !important; width: auto; transition: opacity .3s ease; }
+#hdr-logo { height: 3.6rem !important; width: auto; transition: opacity .3s ease; }
 .nav-a {
-  font-size: .875rem;
-  font-weight: 600;
+  font-size: 1rem;
+  font-weight: 700;
   background: none;
   border: none;
   cursor: pointer;
-  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  font-family: inherit;
   transition: color .2s;
-  padding: .25rem 0;
-  color: rgba(255, 255, 255, .85);
+  padding: .35rem .25rem;
+  color: #1e293b;
+  letter-spacing: -.01em;
   word-break: keep-all;
 }
 #hdr.solid .nav-a { color: #1e293b; }
 .nav-a:hover, .nav-a.active { color: var(--p) !important; }
+.lang-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: .75rem;
+  font-weight: 800;
+  letter-spacing: .08em;
+  background: var(--p);
+  color: #fff;
+  border: none;
+  border-radius: .375rem;
+  padding: .45rem .9rem;
+  cursor: default;
+  font-family: inherit;
+}
 
 /* Dropdown */
 .dd { position: relative; }
@@ -999,7 +1027,10 @@ input[aria-invalid="true"], textarea[aria-invalid="true"], select[aria-invalid="
 @keyframes bounce { 0%,80%,100% { transform: translateY(0); } 40% { transform: translateY(-6px); } }
 
 /* Footer */
-.footer-main { background: #0f172a; border-top: 1px solid rgba(255,255,255,.06); }
+.footer-main { background: #0c2a5e; border-top: none; }
+.footer-brandband { background: #0a2452; padding: 1.5rem 0; border-top: 1px solid rgba(255,255,255,.08); }
+.footer-brandband-inner { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.footer-brandband-name { color: #fff; font-weight: 800; font-size: 1.0625rem; letter-spacing: -.01em; }
 
 /* ───────────────────────────────────────
    반응형 — Tablet (900px 이하)
@@ -1158,10 +1189,14 @@ input[aria-invalid="true"], textarea[aria-invalid="true"], select[aria-invalid="
     </div>
     <button onclick="go('/press')" class="nav-a" data-path="/press">홍보센터</button>
     <button onclick="go('/contact')" class="nav-a" data-path="/contact">문의하기</button>
+    <span style="display:inline-flex;align-items:center;gap:.875rem;margin-left:.75rem;padding-left:1rem;border-left:1px solid #e2e8f0;">
+      <span style="font-size:.875rem;font-weight:700;color:#1e293b;letter-spacing:-.01em;">(주)AI 보안링스</span>
+      <span class="lang-toggle" aria-label="현재 언어: 한국어">KOR</span>
+    </span>
   </nav>
   <button id="mob-btn" style="display:none;background:none;border:none;cursor:pointer;padding:.25rem;" aria-label="메뉴">
-    <svg id="ico-menu" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="white"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
-    <svg id="ico-close" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="white" style="display:none;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+    <svg id="ico-menu" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="#1e293b"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+    <svg id="ico-close" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="#1e293b" style="display:none;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
   </button>
 </div>
 <div id="mob-menu">
@@ -1297,15 +1332,15 @@ document.addEventListener('click',e=>{if(!e.target.closest('.dd'))closeDd();});
 /* ═══ 헤더 ═══ */
 window.addEventListener('scroll',()=>{const s=window.scrollY>40;if(s!==S.scrolled){S.scrolled=s;updateHdr();}});
 function updateHdr(){
-  const h=document.getElementById('hdr'),solid=S.scrolled||S.path!=='/';
-  h.className=solid?'solid':'';
+  // phabios-style: header always solid white. Just add scroll shadow when scrolled.
+  const h=document.getElementById('hdr');
+  h.className=S.scrolled?'solid':'';
   const logo=document.getElementById('hdr-logo');
-  if(logo){logo.src=solid?logo.dataset.color:logo.dataset.white;}
-  const c=solid?'#334155':'rgba(255,255,255,.85)';
-  document.querySelectorAll('.nav-a').forEach(b=>b.style.color=c);
+  if(logo&&logo.dataset.color){logo.src=logo.dataset.color;}
+  document.querySelectorAll('.nav-a').forEach(b=>b.style.color='');
   const mi=document.getElementById('ico-menu'),mc=document.getElementById('ico-close');
-  if(mi)mi.setAttribute('stroke',solid?'#334155':'white');
-  if(mc)mc.setAttribute('stroke',solid?'#334155':'white');
+  if(mi)mi.setAttribute('stroke','#1e293b');
+  if(mc)mc.setAttribute('stroke','#1e293b');
   document.querySelectorAll('.nav-a').forEach(b=>b.classList.toggle('active',b.dataset.path===S.path));
 }
 function toggleMob(){S.mobOpen=!S.mobOpen;document.getElementById('mob-menu').classList.toggle('open',S.mobOpen);document.getElementById('ico-menu').style.display=S.mobOpen?'none':'';document.getElementById('ico-close').style.display=S.mobOpen?'':'none';}
@@ -1763,10 +1798,17 @@ function footerHTML(){
     </div>
   </div>
 </div>
+<!-- Phabios-style brand band -->
+<div class="footer-brandband">
+  <div class="wrap footer-brandband-inner">
+    <img src="${IMG.logo}" alt="BoanLINKS" style="height:1.875rem;object-fit:contain;filter:brightness(0) invert(1);opacity:.95;">
+    <span class="footer-brandband-name">(주)AI 보안링스</span>
+  </div>
+</div>
 <style>
 .footer-grid{grid-template-columns:2fr 1fr 1fr 1fr;}
 @media(max-width:900px){.footer-grid{grid-template-columns:1fr 1fr;}}
-@media(max-width:600px){.footer-grid{grid-template-columns:1fr;}}
+@media(max-width:600px){.footer-grid{grid-template-columns:1fr;}.footer-brandband-inner{flex-direction:column;text-align:center;}}
 </style>`;
 }
 
