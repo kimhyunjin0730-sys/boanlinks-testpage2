@@ -2135,7 +2135,8 @@ function pageSolution(){const sol=SOLS[S.tab];return `<div style="min-height:100
       <div class="simg"><img loading="lazy" src="${sol.img2}" alt="${sol.title} 기능" style="height:18rem;"><div class="simg-ov"></div></div></div>
     </div>
     ${sol.id==='dgo'?dgoDetail():''}
-    <div class="dark fu" style="border-radius:1.5rem;padding:3rem;text-align:center;margin-top:${sol.id==='dgo'?'2':'0'}rem;"><h3 style="font-size:1.125rem;font-weight:500;color:#fff;margin-bottom:.75rem;">${sol.title} 도입을 원하시나요?</h3><p style="color:rgba(226,232,240,.6);margin-bottom:1.75rem;font-size:.9375rem;">전문 컨설턴트가 최적의 솔루션을 안내해 드립니다.</p><div class="hero-cta" style="display:flex;flex-wrap:wrap;gap:.875rem;justify-content:center;"><a href="http://boanlinks.com" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:.5rem;padding:.875rem 2rem;background:#fff;color:#0f172a;font-weight:700;border-radius:.625rem;text-decoration:none;font-size:.875rem;font-family:'Pretendard',-apple-system,BlinkMacSystemFont,system-ui,sans-serif;">서비스 바로가기 ↗</a><button onclick="go('/contact')" class="btn btn-o">도입 문의하기</button></div></div>
+    ${sol.id==='boanlinks'?boanlinksDetail():''}
+    <div class="dark fu" style="border-radius:1.5rem;padding:3rem;text-align:center;margin-top:${sol.id==='dgo'||sol.id==='boanlinks'?'2':'0'}rem;"><h3 style="font-size:1.125rem;font-weight:500;color:#fff;margin-bottom:.75rem;">${sol.title} 도입을 원하시나요?</h3><p style="color:rgba(226,232,240,.6);margin-bottom:1.75rem;font-size:.9375rem;">전문 컨설턴트가 최적의 솔루션을 안내해 드립니다.</p><div class="hero-cta" style="display:flex;flex-wrap:wrap;gap:.875rem;justify-content:center;"><a href="http://boanlinks.com" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:.5rem;padding:.875rem 2rem;background:#fff;color:#0f172a;font-weight:700;border-radius:.625rem;text-decoration:none;font-size:.875rem;font-family:'Pretendard',-apple-system,BlinkMacSystemFont,system-ui,sans-serif;">서비스 바로가기 ↗</a>${sol.id==='boanlinks'?`<a href="/docs/boanlinks-intro.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:.5rem;padding:.875rem 2rem;background:rgba(255,255,255,.1);color:#fff;font-weight:700;border-radius:.625rem;text-decoration:none;font-size:.875rem;border:1px solid rgba(255,255,255,.3);font-family:'Pretendard',-apple-system,BlinkMacSystemFont,system-ui,sans-serif;">📄 소개서 보기 (PDF)</a>`:''}<button onclick="go('/contact')" class="btn btn-o">도입 문의하기</button></div></div>
   </div></div>`;
 }
 
@@ -2162,6 +2163,121 @@ function dgoDetail(){return `
           <p style="font-size:.8125rem;color:#1d4ed8;font-weight:600;margin-bottom:.25rem;">원본대조필 인증서</p>
           <p style="font-size:.8125rem;color:#1e40af;line-height:1.55;">인증 완료 시 QR 코드 검증 지원, 법적 원본 효력 주장 가능 데이터로 분류.</p>
         </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+/* ════════════ Boanlinks 브로슈어 상세 (보안마켓플레이스) ════════════ */
+function boanlinksDetail(){
+  const accent='#2563eb';
+  const stats=[
+    {v:'93%',l:'침해사고 중 중소기업 비중',c:'KISA 2023 보고서'},
+    {v:'194일',l:'공격 탐지 평균 소요 시간',c:'IBM 2024 Cost of a Data Breach'},
+    {v:'55개',l:'OWASP + KISA 기반 점검 항목',c:'Boanlinks 점검 커버리지'},
+    {v:'20~30%',l:'연평균 사이버 보안 시장 성장률',c:'Gartner 2024'},
+  ];
+  const segments=[
+    {t:'스타트업·소상공인',n:'기본적인 웹사이트·시스템 보안 점검',s:'프리 진단으로 즉시 취약점 확인'},
+    {t:'중소기업',n:'정기 보안 점검 + 보안 제품 도입',s:'베이직/스탠다드 플랜으로 종합 점검 + 매칭'},
+    {t:'중견기업',n:'전사 보안 거버넌스 + 컴플라이언스',s:'프리미엄 플랜 + 보안 제품 큐레이션'},
+    {t:'공공·금융',n:'규제 대응 + 고난이도 진단',s:'맞춤형 컨설팅 + ISMS-P 대응 패키지'},
+  ];
+  const threats=[
+    {t:'랜섬웨어 공격 급증',d:'중소기업 대상 랜섬웨어 피해가 매년 증가. 평균 복구 비용 수억 원.'},
+    {t:'웹 애플리케이션 취약점',d:'OWASP TOP 10 취약점을 악용한 공격이 전체 침해사고의 60% 이상.'},
+    {t:'공급망 공격',d:'협력사·솔루션 공급망을 통한 간접 침투 사례 급증.'},
+    {t:'개인정보 유출',d:'개인정보보호법 강화로 유출 시 과징금·배상 리스크 증가.'},
+    {t:'클라우드 오설정',d:'클라우드 전환 가속화로 설정 오류에 따른 유출 위협 증가.'},
+    {t:'내부자 위협',d:'퇴사자·협력사 계정을 통한 데이터 유출 사고 지속 발생.'},
+  ];
+  const values=[
+    {t:'원스톱 서비스',d:'진단부터 제품 매칭까지 하나의 플랫폼에서 해결'},
+    {t:'표준 기반 점검',d:'OWASP TOP 10 · KISA 가이드 기반의 공신력 있는 점검'},
+    {t:'객관적 리포트',d:'이해하기 쉬운 진단 보고서로 경영진 의사결정 지원'},
+    {t:'검증된 파트너',d:'24년 보안 노하우의 진앤현시큐리티가 직접 운영'},
+  ];
+  const features=[
+    {step:'1',t:'웹사이트 악성코드 점검',d:'최신 점검 코드 기반으로 웹사이트에 삽입된 악성코드·피싱 코드를 탐지.'},
+    {step:'2',t:'웹 애플리케이션 취약점 진단',d:'OWASP TOP 10 기반 SQL Injection, XSS, 인증 우회 등 주요 취약점 점검.'},
+    {step:'3',t:'시스템(PC) 취약점 점검',d:'주요 정보통신기반시설 가이드 기반 OS·서비스 설정 취약점 진단.'},
+    {step:'4',t:'네트워크 취약점 점검',d:'유·무선 네트워크 장비 설정 및 접근 통제 취약점 종합 점검.'},
+    {step:'5',t:'보안 제품 매칭',d:'점검 결과와 기업 환경에 맞는 최적 보안 제품을 큐레이션하여 제안.'},
+  ];
+  const tiers=[
+    {n:'프리',p:'무료',hl:false,f:['기본 웹사이트 악성코드 점검','요약 리포트 제공']},
+    {n:'베이직',p:'월 5만원~',hl:false,f:['웹사이트 + 웹앱 취약점 점검','상세 진단 리포트','메일 문의 지원']},
+    {n:'스탠다드',p:'월 15만원~',hl:true,f:['웹·시스템·네트워크 종합 점검','임원 요약 리포트','전담 컨설턴트 배정','보안 제품 매칭']},
+    {n:'프리미엄',p:'월 50만원~',hl:false,f:['전사 보안 거버넌스 지원','ISMS-P 대응 컨설팅','분기별 재진단 포함','우선 대응 SLA']},
+  ];
+  return `
+  <div style="margin-bottom:2rem;">
+    <!-- 개요 + 통계 배너 -->
+    <div class="dark fu" style="border-radius:1.5rem;padding:2.5rem;margin-bottom:2rem;position:relative;overflow:hidden;">
+      <div style="position:absolute;inset:0;background:radial-gradient(ellipse 60% 60% at 30% 20%, ${accent}55, transparent 60%);opacity:.35;pointer-events-none;"></div>
+      <div style="position:relative;">
+        <p style="color:#93c5fd;font-size:.75rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;">개요</p>
+        <h2 style="font-size:clamp(1.25rem,2.2vw,1.75rem);font-weight:700;color:#fff;margin-top:.75rem;line-height:1.3;">원스톱 기업 보안 점검 &amp; 보안 제품 매칭 플랫폼</h2>
+        <p style="color:rgba(226,232,240,.8);margin-top:1rem;max-width:60rem;line-height:1.8;font-size:.9375rem;">Boanlinks는 웹사이트 · 웹애플리케이션 · 시스템 · 네트워크를 표준 기반으로 종합 점검하고, 기업 환경에 맞는 보안 제품을 매칭해 드리는 원스톱 보안 서비스입니다. (주)진앤현시큐리티가 24년간 축적한 보안 운영 노하우로 운영됩니다.</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin-top:1.75rem;">
+          ${stats.map(s=>`<div style="border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);border-radius:1rem;padding:1.25rem;backdrop-filter:blur(6px);"><p style="font-size:1.75rem;font-weight:800;color:#67e8f9;">${s.v}</p><p style="font-size:.875rem;font-weight:600;color:#fff;margin-top:.25rem;">${s.l}</p><p style="font-size:.75rem;color:rgba(226,232,240,.6);margin-top:.25rem;">${s.c}</p></div>`).join('')}
+        </div>
+      </div>
+    </div>
+
+    <!-- 고객 유형 -->
+    <div style="background:#fff;border:1px solid var(--bd);border-radius:1.25rem;padding:2rem;margin-bottom:2rem;" class="fu">
+      <p style="color:${accent};font-size:.75rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;">고객 유형</p>
+      <h3 style="font-size:1.125rem;font-weight:700;color:#0f172a;margin-top:.5rem;margin-bottom:1.25rem;">규모와 업종에 맞는 보안 구조</h3>
+      <div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:.875rem;">
+        <thead><tr style="background:#f8fafc;color:#475569;"><th style="padding:.75rem 1rem;text-align:left;font-weight:600;">고객 유형</th><th style="padding:.75rem 1rem;text-align:left;font-weight:600;">필요 사항</th><th style="padding:.75rem 1rem;text-align:left;font-weight:600;">보안링스 제안</th></tr></thead>
+        <tbody>${segments.map(r=>`<tr style="border-top:1px solid var(--bd);"><td style="padding:.875rem 1rem;font-weight:700;color:#0f172a;">${r.t}</td><td style="padding:.875rem 1rem;color:#1f2937;line-height:1.7;">${r.n}</td><td style="padding:.875rem 1rem;color:#1f2937;line-height:1.7;">${r.s}</td></tr>`).join('')}</tbody>
+      </table></div>
+    </div>
+
+    <!-- 위협 -->
+    <div style="margin-bottom:2rem;" class="fu">
+      <p style="color:#e11d48;font-size:.75rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;">위협 현황</p>
+      <h3 style="font-size:1.125rem;font-weight:700;color:#0f172a;margin-top:.5rem;margin-bottom:1.25rem;">왜 지금 보안이 중요한가</h3>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem;">
+        ${threats.map(t=>`<div style="background:#fff;border:1px solid var(--bd);border-radius:1rem;padding:1.5rem;"><h4 style="font-weight:700;color:#0f172a;">${t.t}</h4><p style="margin-top:.5rem;font-size:.875rem;color:#475569;line-height:1.7;">${t.d}</p></div>`).join('')}
+      </div>
+    </div>
+
+    <!-- 핵심 가치 -->
+    <div style="margin-bottom:2rem;" class="fu">
+      <p style="color:${accent};font-size:.75rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;">핵심 가치</p>
+      <h3 style="font-size:1.125rem;font-weight:700;color:#0f172a;margin-top:.5rem;margin-bottom:1.25rem;">보안링스가 제공하는 가치</h3>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;">
+        ${values.map(v=>`<div style="background:linear-gradient(135deg,#fff,#f8fafc);border:1px solid var(--bd);border-radius:1rem;padding:1.5rem;text-align:center;"><div style="width:48px;height:48px;border-radius:.875rem;background:${accent};color:#fff;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-weight:800;font-size:1.125rem;">✓</div><h4 style="font-weight:700;color:#0f172a;">${v.t}</h4><p style="margin-top:.5rem;font-size:.875rem;color:#475569;line-height:1.7;">${v.d}</p></div>`).join('')}
+      </div>
+    </div>
+
+    <!-- 주요 기능 단계 -->
+    <div style="margin-bottom:2rem;" class="fu">
+      <p style="color:${accent};font-size:.75rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;">기능</p>
+      <h3 style="font-size:1.125rem;font-weight:700;color:#0f172a;margin-top:.5rem;margin-bottom:1.25rem;">주요 기능 및 서비스</h3>
+      <div style="display:flex;flex-direction:column;gap:.75rem;">
+        ${features.map(f=>`<div style="background:#fff;border:1px solid var(--bd);border-radius:1rem;padding:1.25rem;display:flex;gap:1.25rem;align-items:flex-start;"><span style="flex-shrink:0;width:48px;height:48px;border-radius:.875rem;background:${accent};color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.125rem;">${f.step}</span><div><h4 style="font-weight:700;color:#0f172a;">${f.t}</h4><p style="margin-top:.25rem;font-size:.875rem;color:#475569;line-height:1.7;">${f.d}</p></div></div>`).join('')}
+      </div>
+    </div>
+
+    <!-- 요금제 -->
+    <div style="margin-bottom:2rem;" class="fu">
+      <p style="color:${accent};font-size:.75rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;">요금제</p>
+      <h3 style="font-size:1.125rem;font-weight:700;color:#0f172a;margin-top:.5rem;margin-bottom:.5rem;">구독 모델</h3>
+      <p style="color:#64748b;font-size:.875rem;margin-bottom:1.25rem;">기업 규모와 필요에 맞는 유연한 요금제를 선택하세요. 모든 요금제는 진단 · 보고서 · 제품 추천을 포함합니다.</p>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;">
+        ${tiers.map(t=>`<div style="position:relative;background:#fff;border:${t.hl?`2px solid ${accent}`:'1px solid var(--bd)'};border-radius:1rem;padding:1.5rem;${t.hl?`box-shadow:0 8px 24px rgba(37,99,235,.15);transform:translateY(-4px);`:''}">${t.hl?`<span style="position:absolute;top:-12px;right:16px;background:${accent};color:#fff;font-size:.65rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:.2rem .6rem;border-radius:99px;">인기</span>`:''}<p style="font-size:.8125rem;font-weight:600;color:#64748b;">${t.n}</p><p style="margin-top:.5rem;font-size:1.375rem;font-weight:800;color:#0f172a;">${t.p}</p><ul style="margin-top:1rem;display:flex;flex-direction:column;gap:.5rem;padding:0;list-style:none;">${t.f.map(x=>`<li style="display:flex;gap:.5rem;font-size:.8125rem;color:#1f2937;line-height:1.6;"><span style="color:${accent};font-weight:800;">✓</span><span>${x}</span></li>`).join('')}</ul></div>`).join('')}
+      </div>
+    </div>
+
+    <!-- 소개서 보기 배너 -->
+    <div style="background:linear-gradient(135deg,#0f172a,#1e293b);border-radius:1.25rem;padding:2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;" class="fu">
+      <div><p style="color:#93c5fd;font-size:.75rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;">브로슈어</p><h3 style="font-size:1.125rem;font-weight:700;color:#fff;margin-top:.5rem;">보안링스 서비스 소개서 (PDF)</h3><p style="color:rgba(226,232,240,.7);font-size:.875rem;margin-top:.25rem;">12페이지 분량의 공식 소개자료를 PDF로 바로 확인하세요.</p></div>
+      <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
+        <a href="/docs/boanlinks-intro.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:.5rem;padding:.75rem 1.5rem;background:#fff;color:#0f172a;font-weight:700;border-radius:.625rem;text-decoration:none;font-size:.875rem;font-family:'Pretendard',-apple-system,BlinkMacSystemFont,system-ui,sans-serif;">📄 소개서 보기 (PDF)</a>
+        <a href="/docs/boanlinks-intro.pdf" download="Boanlinks-소개서.pdf" style="display:inline-flex;align-items:center;gap:.5rem;padding:.75rem 1.5rem;background:rgba(255,255,255,.1);color:#fff;font-weight:700;border-radius:.625rem;text-decoration:none;font-size:.875rem;border:1px solid rgba(255,255,255,.3);font-family:'Pretendard',-apple-system,BlinkMacSystemFont,system-ui,sans-serif;">⬇ 다운로드</a>
       </div>
     </div>
   </div>`;
