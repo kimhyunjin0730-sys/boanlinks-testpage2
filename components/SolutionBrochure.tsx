@@ -127,21 +127,26 @@ export function SolutionBrochure({ solution }: { solution: Solution }) {
             </h3>
           </header>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-            {b.values.map((v) => (
-              <article
-                key={v.title}
-                className="rounded-2xl border border-border bg-gradient-to-br from-white to-slate-50 p-6 text-center"
-              >
-                <div
-                  className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl text-white text-lg font-bold"
-                  style={{ backgroundColor: accent }}
+            {b.values.map((v, i) => {
+              const icons = ['M9 12l2 2 4-4', 'M9 11H5a2 2 0 00-2 2v7a2 2 0 002 2h14a2 2 0 002-2v-7a2 2 0 00-2-2h-4M9 11V5a3 3 0 016 0v6', 'M3 13l9-9 9 9M5 13v7a1 1 0 001 1h12a1 1 0 001-1v-7', 'M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5'];
+              return (
+                <article
+                  key={v.title}
+                  className="rounded-2xl border border-border bg-white p-6 text-center"
                 >
-                  ✓
-                </div>
-                <h4 className="font-bold text-navy">{v.title}</h4>
-                <p className="mt-2 text-sm text-slate-600 leading-relaxed">{v.description}</p>
-              </article>
-            ))}
+                  <div
+                    className="mx-auto mb-4 flex h-13 w-13 items-center justify-center rounded-xl"
+                    style={{ width: 52, height: 52, backgroundColor: `${accent}14`, color: accent }}
+                  >
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                      <path d={icons[i % icons.length]} />
+                    </svg>
+                  </div>
+                  <h4 className="font-bold text-navy">{v.title}</h4>
+                  <p className="mt-2 text-sm text-slate-600 leading-relaxed">{v.description}</p>
+                </article>
+              );
+            })}
           </div>
         </section>
       )}
@@ -215,33 +220,48 @@ export function SolutionBrochure({ solution }: { solution: Solution }) {
               기업 규모와 필요에 맞는 유연한 요금제를 선택하세요. 모든 요금제는 진단·보고서·제품 추천을 포함합니다.
             </p>
           </header>
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 items-stretch">
             {b.pricingTiers.map((tier) => (
               <article
                 key={tier.name}
-                className={`relative rounded-2xl border p-6 transition-all ${
+                className={`relative flex flex-col rounded-2xl border p-7 transition-all ${
                   tier.highlight
-                    ? 'border-primary shadow-lg -translate-y-1 bg-white ring-1 ring-primary/30'
+                    ? 'border-primary shadow-xl bg-gradient-to-b from-white to-blue-50/40'
                     : 'border-border bg-white'
                 }`}
               >
                 {tier.highlight && (
-                  <span className="absolute -top-3 right-4 rounded-full bg-primary px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white">
-                    인기
+                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-primary px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white inline-flex items-center gap-1">
+                    ★ 인기
                   </span>
                 )}
-                <p className="text-sm font-semibold text-slate-500">{tier.name}</p>
-                <p className="mt-2 text-2xl font-extrabold text-navy">{tier.price}</p>
-                <ul className="mt-4 space-y-2">
+                <p className="text-sm font-bold tracking-wide" style={{ color: tier.highlight ? accent : '#64748b' }}>
+                  {tier.name}
+                </p>
+                <p className="mt-2 text-3xl font-extrabold text-navy tracking-tight leading-none">
+                  {tier.price}
+                </p>
+                <ul className="mt-5 space-y-2.5 flex-grow">
                   {tier.features.map((f) => (
-                    <li key={f} className="flex items-start gap-2 text-sm text-slate-700">
-                      <span style={{ color: accent }} className="mt-0.5 font-bold">
+                    <li key={f} className="flex items-start gap-2 text-sm text-slate-700 leading-relaxed">
+                      <span style={{ color: accent }} className="mt-0.5 font-bold flex-shrink-0">
                         ✓
                       </span>
                       <span>{f}</span>
                     </li>
                   ))}
                 </ul>
+                <a
+                  href="/contact"
+                  className={`mt-6 inline-flex items-center justify-center rounded-[.625rem] px-4 py-2.5 text-sm font-bold transition-all hover:-translate-y-[1px] ${
+                    tier.highlight
+                      ? 'bg-primary text-white hover:bg-primary-dark'
+                      : 'bg-white text-navy border border-border hover:bg-slate-50'
+                  }`}
+                  style={tier.highlight ? { backgroundColor: accent } : undefined}
+                >
+                  {tier.name} 문의 →
+                </a>
               </article>
             ))}
           </div>
