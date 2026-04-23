@@ -2619,23 +2619,85 @@ function boanlinksDetail(){
       </div>
     </div>
 
-    <!-- 인라인 PDF 뷰어 (PPTX/PDF 새 창 X — 여기서 바로 쭈루룩) -->
-    <div id="bl-brochure-pdf" style="background:#fff;border:1px solid var(--bd);border-radius:1rem;overflow:hidden;margin-bottom:2rem;scroll-margin-top:80px;" class="fu">
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:.875rem 1.25rem;border-bottom:1px solid var(--bd);background:#f8fafc;flex-wrap:wrap;gap:.75rem;">
-        <div style="display:flex;align-items:center;gap:.625rem;min-width:0;">
-          <span style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:.5rem;background:${accent}1a;color:${accent};">${svg(ico.pdf,18)}</span>
+    <!-- 인라인 PDF 뷰어 — 크기 조절 + 모바일 최적화 -->
+    <div id="bl-brochure-pdf" class="bl-pdf fu" style="background:#fff;border:1px solid var(--bd);border-radius:1rem;overflow:hidden;margin-bottom:2rem;scroll-margin-top:80px;">
+      <div class="bl-pdf-bar" style="display:flex;align-items:center;justify-content:space-between;padding:.75rem 1rem;border-bottom:1px solid var(--bd);background:#f8fafc;flex-wrap:wrap;gap:.625rem;">
+        <div style="display:flex;align-items:center;gap:.625rem;min-width:0;flex:1;">
+          <span style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:.5rem;background:${accent}1a;color:${accent};flex-shrink:0;">${svg(ico.pdf,18)}</span>
           <div style="min-width:0;">
-            <p style="font-size:.7rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#64748b;">소개서</p>
-            <p style="font-size:.875rem;font-weight:700;color:#0f172a;margin-top:.125rem;">보안링스 서비스 소개서 (12p)</p>
+            <p style="font-size:.65rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#64748b;">소개서</p>
+            <p class="bl-pdf-title" style="font-size:.875rem;font-weight:700;color:#0f172a;margin-top:.125rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">보안링스 서비스 소개서 (12p)</p>
           </div>
         </div>
-        <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
-          <a href="/docs/boanlinks-intro.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:.4rem;padding:.5rem .875rem;background:#fff;color:#0f172a;border:1px solid var(--bd);border-radius:.5rem;font-size:.75rem;font-weight:700;text-decoration:none;">새 창</a>
-          <a href="/docs/boanlinks-intro.pdf" download="Boanlinks-소개서.pdf" style="display:inline-flex;align-items:center;gap:.4rem;padding:.5rem .875rem;background:${accent};color:#fff;border:none;border-radius:.5rem;font-size:.75rem;font-weight:700;text-decoration:none;">${svg(ico.download,12)}다운로드</a>
+        <div class="bl-pdf-tools" style="display:flex;align-items:center;gap:.375rem;flex-wrap:wrap;">
+          <!-- 크기 프리셋 (데스크탑 전용) -->
+          <div class="bl-pdf-sizes" role="group" aria-label="뷰어 높이" style="display:inline-flex;background:#fff;border:1px solid var(--bd);border-radius:.5rem;padding:2px;">
+            <button type="button" data-size="s" onclick="blPdfSize('s')" style="padding:.3rem .55rem;font-size:.7rem;font-weight:700;color:#64748b;background:transparent;border:none;border-radius:.375rem;cursor:pointer;font-family:inherit;">작게</button>
+            <button type="button" data-size="m" onclick="blPdfSize('m')" aria-pressed="true" style="padding:.3rem .55rem;font-size:.7rem;font-weight:700;color:#0f172a;background:#f1f5f9;border:none;border-radius:.375rem;cursor:pointer;font-family:inherit;">보통</button>
+            <button type="button" data-size="l" onclick="blPdfSize('l')" style="padding:.3rem .55rem;font-size:.7rem;font-weight:700;color:#64748b;background:transparent;border:none;border-radius:.375rem;cursor:pointer;font-family:inherit;">크게</button>
+          </div>
+          <button type="button" onclick="blPdfFullscreen()" aria-label="전체화면" title="전체화면" style="display:inline-flex;align-items:center;gap:.3rem;padding:.4rem .65rem;background:#fff;color:#0f172a;border:1px solid var(--bd);border-radius:.5rem;font-size:.7rem;font-weight:700;cursor:pointer;font-family:inherit;">⤢ 전체화면</button>
+          <a href="/docs/boanlinks-intro.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:.3rem;padding:.4rem .65rem;background:#fff;color:#0f172a;border:1px solid var(--bd);border-radius:.5rem;font-size:.7rem;font-weight:700;text-decoration:none;">새 창</a>
+          <a href="/docs/boanlinks-intro.pdf" download="Boanlinks-소개서.pdf" style="display:inline-flex;align-items:center;gap:.3rem;padding:.4rem .65rem;background:${accent};color:#fff;border:none;border-radius:.5rem;font-size:.7rem;font-weight:700;text-decoration:none;">${svg(ico.download,12)}다운로드</a>
         </div>
       </div>
-      <iframe src="/docs/boanlinks-intro.pdf#view=FitH&toolbar=0&navpanes=0" title="보안링스 서비스 소개서" loading="lazy" style="width:100%;height:min(900px,calc(100vh - 120px));border:0;background:#f1f5f9;display:block;"></iframe>
+      <!-- 데스크탑 iframe -->
+      <div class="bl-pdf-frame-wrap">
+        <iframe id="bl-pdf-frame" src="/docs/boanlinks-intro.pdf#view=FitH&toolbar=0&navpanes=0" title="보안링스 서비스 소개서" loading="lazy" style="width:100%;height:720px;border:0;background:#f1f5f9;display:block;"></iframe>
+      </div>
+      <!-- 모바일 fallback (iOS/안드로이드는 inline PDF 미지원이 많음) -->
+      <div class="bl-pdf-mobile" style="display:none;padding:1.25rem;text-align:center;background:#f8fafc;">
+        <p style="font-size:.8125rem;color:#475569;line-height:1.7;font-weight:600;">모바일에서는 PDF 인라인 뷰어가 제한될 수 있어요.<br/>아래 버튼으로 PDF 를 바로 여세요.</p>
+        <div style="margin-top:1rem;display:flex;flex-direction:column;gap:.5rem;">
+          <a href="/docs/boanlinks-intro.pdf" target="_blank" rel="noopener" style="display:inline-flex;justify-content:center;align-items:center;gap:.4rem;padding:.875rem 1rem;background:${accent};color:#fff;border-radius:.625rem;font-size:.875rem;font-weight:800;text-decoration:none;">${svg(ico.pdf,16)}소개서 PDF 열기</a>
+          <a href="/docs/boanlinks-intro.pdf" download="Boanlinks-소개서.pdf" style="display:inline-flex;justify-content:center;align-items:center;gap:.4rem;padding:.75rem 1rem;background:#fff;color:#0f172a;border:1px solid var(--bd);border-radius:.625rem;font-size:.8125rem;font-weight:700;text-decoration:none;">${svg(ico.download,14)}다운로드</a>
+        </div>
+      </div>
     </div>
+
+    <style>
+      /* PDF 뷰어 크기 프리셋 — 클래스로 토글 */
+      #bl-brochure-pdf.size-s #bl-pdf-frame{height:480px;}
+      #bl-brochure-pdf.size-m #bl-pdf-frame{height:720px;}
+      #bl-brochure-pdf.size-l #bl-pdf-frame{height:min(1100px,calc(100vh - 80px));}
+      /* 모바일 — iframe 숨기고 fallback 노출, 도구 단순화 */
+      @media(max-width:768px){
+        #bl-brochure-pdf .bl-pdf-frame-wrap{display:none;}
+        #bl-brochure-pdf .bl-pdf-mobile{display:block!important;}
+        #bl-brochure-pdf .bl-pdf-sizes,
+        #bl-brochure-pdf .bl-pdf-tools button[onclick="blPdfFullscreen()"]{display:none!important;}
+        #bl-brochure-pdf .bl-pdf-bar{padding:.625rem .75rem;}
+        #bl-brochure-pdf .bl-pdf-tools{gap:.25rem;}
+        #bl-brochure-pdf .bl-pdf-tools a{padding:.35rem .55rem;font-size:.65rem;}
+      }
+      /* 활성 크기 버튼 표시 (JS 가 토글) */
+      #bl-brochure-pdf .bl-pdf-sizes button.is-active{background:#f1f5f9;color:#0f172a;}
+      #bl-brochure-pdf .bl-pdf-sizes button:not(.is-active){background:transparent;color:#64748b;}
+    </style>
+    <script>
+      window.blPdfSize=window.blPdfSize||function(sz){
+        var root=document.getElementById('bl-brochure-pdf');
+        if(!root)return;
+        root.classList.remove('size-s','size-m','size-l');
+        root.classList.add('size-'+sz);
+        root.querySelectorAll('.bl-pdf-sizes button').forEach(function(b){
+          var active=b.getAttribute('data-size')===sz;
+          b.classList.toggle('is-active',active);
+          b.setAttribute('aria-pressed',active?'true':'false');
+        });
+      };
+      window.blPdfFullscreen=window.blPdfFullscreen||function(){
+        var f=document.getElementById('bl-pdf-frame');
+        if(!f)return;
+        if(f.requestFullscreen)f.requestFullscreen();
+        else window.open('/docs/boanlinks-intro.pdf','_blank','noopener');
+      };
+      // 초기 활성화 — 보통
+      setTimeout(function(){
+        var root=document.getElementById('bl-brochure-pdf');
+        if(root&&!root.classList.contains('size-s')&&!root.classList.contains('size-m')&&!root.classList.contains('size-l'))root.classList.add('size-m');
+      },0);
+    </script>
 
     <!-- 마무리 CTA -->
     <div style="background:linear-gradient(135deg,#f8faff,#eef2ff);border:1px solid ${accent}33;border-radius:1rem;padding:1.75rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;" class="fu">
