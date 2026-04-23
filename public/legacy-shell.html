@@ -1286,6 +1286,30 @@ const SOLS=[
 
 
 let PRESS = [];
+
+// 파트너 프레스 (ICTK / 필라넷) — 외부 사이트의 공식 뉴스 페이지를 끌어와 카드로 노출.
+// 카드 클릭 시 origin_url(원문) 새 탭으로 열림. id는 Supabase 숫자 id와 충돌 회피 위해 900000+ 사용.
+const PARTNER_PRESS = [
+  // ICTK
+  {id:900101, cat:'뉴스', source:'ICTK', date:'2026-04-06', title:"아이씨티케이, Japan IT Week 2026 참가… 신제품 'G5Q' 공개로 일본 양자보안 시장 공략", summary:"ICTK가 Japan IT Week 2026에 참가해 신제품 G5Q를 공개하며 일본 양자보안 시장 공략에 나섰습니다.", img:'', origin_url:'https://ictk.com/pressRelease/?q=YToxOntzOjEyOiJrZXl3b3JkX3R5cGUiO3M6MzoiYWxsIjt9&bmode=view&idx=170709840&t=board'},
+  {id:900102, cat:'뉴스', source:'ICTK', date:'2026-04-02', title:"양자 시대 보안, 암호에서 신뢰로 전환… ICTK '양자 신뢰점 구조' 제시", summary:"양자 시대의 보안 패러다임을 암호 중심에서 신뢰 중심으로 전환할 '양자 신뢰점 구조'를 ICTK가 제시했습니다.", img:'', origin_url:'https://ictk.com/pressRelease/?q=YToxOntzOjEyOiJrZXl3b3JkX3R5cGUiO3M6MzoiYWxsIjt9&bmode=view&idx=170660736&t=board'},
+  {id:900103, cat:'뉴스', source:'ICTK', date:'2026-03-27', title:"아이씨티케이, 방산기술보호연구소와 기술교류 MOU 체결… PUF 기반 신뢰기술로 방산 보안 적용 범위 확대", summary:"ICTK가 방산기술보호연구소와 MOU를 체결하고 PUF 기반 신뢰 기술의 방산 보안 적용 범위를 확장합니다.", img:'', origin_url:'https://ictk.com/pressRelease/?q=YToxOntzOjEyOiJrZXl3b3JkX3R5cGUiO3M6MzoiYWxsIjt9&bmode=view&idx=170570604&t=board'},
+  {id:900104, cat:'뉴스', source:'ICTK', date:'2026-03-25', title:"오픈클로·피지컬AI 시대, '하드웨어 기반 신뢰' 재설계 시급", summary:"오픈클로·피지컬AI 시대를 맞아 하드웨어 기반 신뢰 아키텍처의 재설계가 시급합니다.", img:'', origin_url:'https://ictk.com/pressRelease/?q=YToxOntzOjEyOiJrZXl3b3JkX3R5cGUiO3M6MzoiYWxsIjt9&bmode=view&idx=170537220&t=board'},
+  {id:900105, cat:'뉴스', source:'ICTK', date:'2026-03-11', title:"오픈소스 AI 비서 '오픈클로(OpenClaw)' 확산… \"편리함만큼 '문단속'도 중요\"", summary:"오픈소스 AI 비서 OpenClaw가 확산되면서 편리성만큼이나 보안 점검의 중요성이 강조됩니다.", img:'', origin_url:'https://ictk.com/pressRelease/?q=YToxOntzOjEyOiJrZXl3b3JkX3R5cGUiO3M6MzoiYWxsIjt9&bmode=view&idx=170352506&t=board'},
+  {id:900106, cat:'뉴스', source:'ICTK', date:'2026-03-04', title:"MWC 2026을 빛낸 보안 기술들... '암호화'로 AI 시대 철통 방어", summary:"MWC 2026에서 주목받은 보안 기술들이 암호화를 통해 AI 시대의 철통 방어를 구현합니다.", img:'', origin_url:'https://ictk.com/pressRelease/?q=YToxOntzOjEyOiJrZXl3b3JkX3R5cGUiO3M6MzoiYWxsIjt9&bmode=view&idx=170249213&t=board'},
+  {id:900107, cat:'뉴스', source:'ICTK', date:'2026-02-25', title:"아이씨티케이, 국내 통신사와 협업해 PQC KMS 솔루션 개발 완료…모바일 시장 양자보안 상용화 본격 추진", summary:"ICTK가 국내 통신사와 협업해 PQC KMS 솔루션 개발을 완료하고 모바일 양자보안 상용화에 나섭니다.", img:'', origin_url:'https://ictk.com/pressRelease/?q=YToxOntzOjEyOiJrZXl3b3JkX3R5cGUiO3M6MzoiYWxsIjt9&bmode=view&idx=170160326&t=board'},
+  {id:900108, cat:'뉴스', source:'ICTK', date:'2026-02-19', title:"아이씨티케이(ICTK), MWC 2026서 '양자보안 글로벌 표준' 비전 제시… 모바일·배터리 시장 본격 정조준", summary:"ICTK가 MWC 2026에서 양자보안 글로벌 표준 비전을 제시하며 모바일·배터리 시장을 정조준합니다.", img:'', origin_url:'https://ictk.com/pressRelease/?q=YToxOntzOjEyOiJrZXl3b3JkX3R5cGUiO3M6MzoiYWxsIjt9&bmode=view&idx=170060789&t=board'},
+  {id:900109, cat:'뉴스', source:'ICTK', date:'2026-02-12', title:"2026 양자보안 솔루션 리포트 - PQC 구현과 동시에 요구되는 Hardware Root of Trust(HRoT) ICTK", summary:"PQC 구현과 동시에 Hardware Root of Trust(HRoT) 아키텍처가 함께 요구된다는 2026 양자보안 리포트.", img:'', origin_url:'https://ictk.com/pressRelease/?q=YToxOntzOjEyOiJrZXl3b3JkX3R5cGUiO3M6MzoiYWxsIjt9&bmode=view&idx=169993807&t=board'},
+  // 필라넷 (개별 기사 URL이 없어 공식 뉴스 페이지로 연결)
+  {id:900201, cat:'뉴스', source:'필라넷', date:'2026-03-01', title:"Proofpoint 고객 세미나 진행 — GS계열사 대상 이메일 보안", summary:"필라넷이 GS계열사를 대상으로 Proofpoint 이메일 보안 세미나를 진행했습니다.", img:'', origin_url:'https://www.feelanet.com/page/news.html'},
+  {id:900202, cat:'뉴스', source:'필라넷', date:'2026-02-15', title:"필라넷, 'Xpilot' AI 서비스 신규 출시", summary:"AI 포털, AI 플래너 등 다양한 솔루션을 포함한 Xpilot 시리즈를 새롭게 선보입니다.", img:'', origin_url:'https://www.feelanet.com/page/news.html'},
+  {id:900203, cat:'뉴스', source:'필라넷', date:'2026-01-20', title:"2025 국제해양방위산업전 참가", summary:"차세대 국방 보안솔루션 및 EO/IR 카메라를 전시했습니다.", img:'', origin_url:'https://www.feelanet.com/page/news.html'},
+  {id:900204, cat:'뉴스', source:'필라넷', date:'2025-12-10', title:"실전형 AX 인재 육성으로 산업 전반에 'AX 실행 생태계' 확산", summary:"실전형 AX 인재 육성을 통해 산업 전반에 AX 실행 생태계를 확산시킵니다.", img:'', origin_url:'https://www.feelanet.com/page/news.html'},
+  {id:900205, cat:'뉴스', source:'필라넷', date:'2025-11-05', title:"한국공항공사 김포/제주공항 통합관제 플랫폼 구축", summary:"카메라 설치와 통합관제 플랫폼 구축을 포함한 인프라 프로젝트를 수행했습니다.", img:'', origin_url:'https://www.feelanet.com/page/news.html'},
+];
+// content 필드는 origin_url 폴백 시에만 쓰이므로 summary로 채워둔다.
+PARTNER_PRESS.forEach(p=>{ if(!p.content) p.content = p.summary; });
+
 const SUPABASE_URL = 'https://ebmbzqmucwthwqyghzmb.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_2OuUVX9KHgn3ah2-BHDpsw_5Rw79-tP';
 
@@ -2871,7 +2895,14 @@ window.addEventListener('DOMContentLoaded', ()=>{
   render();
   handleResize();
   // 홍보센터 데이터는 백그라운드에서 비차단 로드
-  loadPress().then(data=>{ PRESS=data; if(S.path==='/'||S.path==='/press')render(); }).catch(()=>{});
+  // PARTNER_PRESS 즉시 노출 + Supabase 데이터 도착 시 합치고 날짜순 정렬
+  PRESS = [...PARTNER_PRESS].sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+  loadPress().then(data=>{
+    const merged = [...(data||[]), ...PARTNER_PRESS]
+      .sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+    PRESS = merged;
+    if(S.path==='/'||S.path==='/press')render();
+  }).catch(()=>{});
 });
 new MutationObserver(()=>{bindForm();bindChat();}).observe(document.getElementById('app'),{childList:true,subtree:false});
 
