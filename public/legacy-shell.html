@@ -2501,7 +2501,7 @@ function boanlinksDetail(){
           <p style="margin-top:1.125rem;font-size:.9375rem;color:#475569;line-height:1.85;max-width:34rem;font-weight:500;">중소기업도 누구나 보안 자산을 정리할 수 있도록, 전 영역의 점검 항목을 자동 분석하고 위협 우선순위를 책정합니다. 한 화면에서 보안 상태와 다음 액션을 확인하세요.</p>
           <div style="margin-top:1.625rem;display:flex;flex-wrap:wrap;gap:.625rem;">
             <button onclick="go('/contact')" style="display:inline-flex;align-items:center;gap:.4rem;padding:.875rem 1.5rem;background:#0a1428;color:#fff;border:none;border-radius:.625rem;font-family:inherit;font-size:.875rem;font-weight:800;cursor:pointer;letter-spacing:-.005em;transition:transform .15s,box-shadow .15s;" onmouseover="this.style.transform='translateY(-1px)';this.style.boxShadow='0 8px 24px rgba(10,20,40,.18)'" onmouseout="this.style.transform='';this.style.boxShadow=''">무료로 시작하기 →</button>
-            <button onclick="goSol(0)" style="display:inline-flex;align-items:center;gap:.4rem;padding:.875rem 1.25rem;background:#fff;color:#0f172a;border:1px solid var(--bd);border-radius:.625rem;font-family:inherit;font-size:.875rem;font-weight:700;cursor:pointer;letter-spacing:-.005em;transition:background .15s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='#fff'">소개서 보기</button>
+            <button onclick="document.getElementById('bl-brochure-inline')?.scrollIntoView({behavior:'smooth',block:'start'})" style="display:inline-flex;align-items:center;gap:.4rem;padding:.875rem 1.25rem;background:#fff;color:#0f172a;border:1px solid var(--bd);border-radius:.625rem;font-family:inherit;font-size:.875rem;font-weight:700;cursor:pointer;letter-spacing:-.005em;transition:background .15s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='#fff'">소개서 보기 ↓</button>
           </div>
           <div style="margin-top:1.75rem;display:flex;gap:2rem;flex-wrap:wrap;">
             ${heroStats.map(s=>`
@@ -2547,7 +2547,7 @@ function boanlinksDetail(){
     </div>
 
     <!-- Pillars: 01/02/03 -->
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin-bottom:1.5rem;" class="fu">
+    <div id="bl-brochure-inline" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin-bottom:1.5rem;scroll-margin-top:80px;" class="fu">
       ${overviewPillars.map(p=>`
         <div style="background:#fff;border:1px solid var(--bd);border-radius:.875rem;padding:1.5rem 1.5rem 1.625rem;">
           <span style="display:inline-flex;align-items:center;justify-content:center;font-family:monospace;font-size:.7rem;font-weight:800;letter-spacing:.06em;color:${accent};background:${accent}14;padding:.25rem .55rem;border-radius:99px;">${p.n}</span>
@@ -2619,15 +2619,14 @@ function boanlinksDetail(){
       </div>
     </div>
 
-    <!-- 소개서 PDF 카드 (라이트 톤 — 다크 반복 제거) -->
+    <!-- 마무리 CTA (인라인 브로슈어 끝) -->
     <div style="background:linear-gradient(135deg,#f8faff,#eef2ff);border:1px solid ${accent}33;border-radius:1rem;padding:1.75rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;" class="fu">
-      <div style="display:flex;align-items:center;gap:1rem;flex:1;min-width:0;">
-        <div style="flex-shrink:0;width:48px;height:48px;border-radius:.75rem;background:${accent}1a;color:${accent};display:flex;align-items:center;justify-content:center;">${svg(ico.pdf,24)}</div>
-        <div style="min-width:0;"><p style="${ey}">브로슈어</p><h4 style="font-size:1rem;font-weight:700;color:#0f172a;margin-top:.25rem;">보안링스 서비스 소개서 (12p)</h4></div>
+      <div style="min-width:0;flex:1;">
+        <p style="${ey}">다음 단계</p>
+        <h4 style="font-size:1rem;font-weight:700;color:#0f172a;margin-top:.25rem;">기업 환경에 맞는 구성을 직접 제안받아 보세요</h4>
       </div>
       <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
-        <a href="/docs/boanlinks-intro.pdf" target="_blank" rel="noopener" aria-label="소개서 PDF 새 탭에서 열기" style="${btnPdfPrimary}">${svg(ico.pdf,16)}소개서 보기</a>
-        <a href="/docs/boanlinks-intro.pdf" download="Boanlinks-소개서.pdf" aria-label="소개서 PDF 다운로드" style="${btnPdfGhost}">${svg(ico.download,16)}다운로드</a>
+        <button onclick="go('/contact')" style="${btnPdfPrimary};border:none;cursor:pointer;font-family:inherit;">${svg(ico.arrow,16)}무료 상담 신청</button>
       </div>
     </div>
   </div>`;

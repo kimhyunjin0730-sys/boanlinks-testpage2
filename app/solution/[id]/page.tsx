@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { SOLUTIONS } from '@/data/solutions';
 import { SolutionBrochure } from '@/components/SolutionBrochure';
-import { PdfViewer } from '@/components/PdfViewer';
+import { ScrollLink } from '@/components/ScrollLink';
 
 type RouteParams = { id: string };
 
@@ -121,7 +121,10 @@ export default async function SolutionDetailPage({
 
       {/* Brochure (only when data is present, e.g. 보안마켓플레이스) */}
       {hasBrochure && (
-        <section className="bg-slate-50 py-16 md:py-24">
+        <section
+          id="brochure"
+          className="bg-slate-50 py-16 md:py-24 scroll-mt-20"
+        >
           <div className="wrap">
             <SolutionBrochure solution={solution} />
           </div>
@@ -144,13 +147,13 @@ export default async function SolutionDetailPage({
             >
               무료 상담 신청
             </Link>
-            {hasBrochure && solution.brochure?.pdfUrl && (
-              <PdfViewer
-                pdfUrl={solution.brochure.pdfUrl}
-                slideImages={solution.brochure.slideImages}
-                downloadName={`${solution.eng}-소개서.pdf`}
-                triggerLabel="소개서 보기 (PDF)"
-              />
+            {hasBrochure && (
+              <ScrollLink
+                targetId="brochure"
+                className="inline-flex items-center justify-center gap-2 rounded-[.625rem] bg-white text-navy border border-border px-6 py-3 text-sm font-semibold transition-all hover:bg-slate-50 hover:-translate-y-[1px]"
+              >
+                소개서 바로 보기 ↑
+              </ScrollLink>
             )}
             <Link
               href="/solution"
