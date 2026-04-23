@@ -1842,92 +1842,45 @@ function bindFooterFam(){
 
 /* ════════════ HOME ════════════ */
 function pageHome(){
-  // Humanized, corporate-feel hero. Asymmetric layout: copy left, trust panel right.
+  // Phabios-style hero: full-bleed photo + minimal big-typo overlay, left-aligned
   const slides=[
     {
-      bg:'dark', badge:'AI 보안링스 · 24년 동행',
+      img: SOLS[0].img1, // 보안마켓플레이스 photo
       eyebrow:'Trusted Security Partner',
-      title:'기업과 사람을 잇는<br><span style="background:linear-gradient(135deg,#93c5fd,#67e8f9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">신뢰의 보안</span>',
+      title:'기업과 사람을 잇는<br>신뢰의 보안',
       sub:'24년간 1,200여 고객사와 함께한 경험. 사람·법률·기술이 한 자리에서 책임집니다.',
       cta1:{t:'무료 보안 진단',fn:"go('/contact')"},
       cta2:{t:'솔루션 둘러보기',fn:"go('/solution')"},
-      panel:[
-        {k:'24년+',v:'보안 전문 업력'},
-        {k:'1,200+',v:'함께한 고객사'},
-        {k:'99.9%',v:'서비스 가용성'},
-        {k:'24/7',v:'전문가 상시 대응'},
-      ],
-      pill:'ISMS-P · ISO27001 · 정보보호 전문서비스 인증',
     },
     {
-      bg:'gradient1', badge:'D-GO · 양자데이터금고',
+      img: SOLS[1].img1, // D-GO photo
       eyebrow:'Digital Data Safe Vault',
-      title:'우리가 지키는 건 데이터가 아니라<br><span style="background:linear-gradient(135deg,#fde68a,#f59e0b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">고객의 약속</span>입니다',
+      title:'우리가 지키는 건 데이터가 아닌<br>고객의 약속입니다',
       sub:'의사·변호사·회계사·계약서·고객정보. 법적 원본과 동일한 효력으로 보관합니다.',
       cta1:{t:'D-GO 자세히 보기',fn:"goSol(1)"},
       cta2:{t:'담당자 상담 신청',fn:"go('/contact')"},
-      panel:[
-        {k:'복제 방지',v:'PUF 기반 하드웨어 키'},
-        {k:'무결성 보장',v:'원본대조필 인증'},
-        {k:'네트워크 격리',v:'폐쇄형 운영'},
-        {k:'법적 효력',v:'원본 동일 인정'},
-      ],
-      pill:'전자문서법 / 개인정보보호법 / 의료법 대응',
     },
     {
-      bg:'gradient2', badge:'Boanlinks · One-Stop Cyber Risk',
+      img: SOLS[4]?.img1 || SOLS[0].img2, // 리스크 관리 photo (fallback)
       eyebrow:'People · Law · Technology',
-      title:'사이버 위협에 맞서는 가장 든든한<br><span style="background:linear-gradient(135deg,#a7f3d0,#34d399);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">한 팀</span>',
-      sub:'보험·법률·기술 전문가가 한 채널에서 즉시 대응합니다. 위기 순간 혼자 두지 않습니다.',
+      title:'사이버 위협에 맞서는<br>가장 든든한 한 팀',
+      sub:'보험·법률·기술 전문가가 한 채널에서 즉시 대응합니다. 위기의 순간 혼자 두지 않습니다.',
       cta1:{t:'파트너 네트워크',fn:"go('/about')"},
       cta2:{t:'사업 소개',fn:"go('/about')"},
-      panel:[
-        {k:'보험',v:'사이버배상책임 견적'},
-        {k:'법률',v:'개인정보 자문 변호사'},
-        {k:'기술',v:'24/7 침해대응 SOC'},
-        {k:'복구',v:'데이터·평판 회복'},
-      ],
-      pill:'금융권 · 의료 · 법무 · 공공 · 교육 분야 대응',
     },
   ];
 
   const slideHTML=slides.map((sl,i)=>{
-    const gradMap={dark:'background:#060d1f',gradient1:'background:linear-gradient(135deg,#1e1b4b 0%,#1d4ed8 45%,#7c3aed 100%)',gradient2:'background:linear-gradient(135deg,#0f2027 0%,#0a4f3f 50%,#064e3b 100%)'};
-    return `<div class="hero-slide" style="${i===0?'background:#060d1f':gradMap[sl.bg]};position:relative;">
-      ${i===0?'<canvas id="security-canvas" style="position:absolute;inset:0;width:100%;height:100%;display:block;"></canvas>':i===1?'<canvas id="vault-canvas" style="position:absolute;inset:0;width:100%;height:100%;display:block;"></canvas>':'<canvas id="trust-canvas" style="position:absolute;inset:0;width:100%;height:100%;display:block;"></canvas>'}
-      <div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent,rgba(0,0,0,.45));"></div>
-      <div style="position:absolute;inset:0;opacity:.025;background-image:linear-gradient(rgba(255,255,255,.5) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.5) 1px,transparent 1px);background-size:52px 52px;"></div>
-      <div class="hero-inner" style="position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:5rem 1.5rem 4.5rem;display:grid;grid-template-columns:1.15fr .85fr;gap:3rem;align-items:center;">
-        <!-- LEFT: copy -->
-        <div>
-          <div style="display:inline-flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:99px;padding:.4rem 1rem;margin-bottom:1.5rem;">
-            <span style="width:6px;height:6px;border-radius:50%;background:#60a5fa;display:inline-block;"></span>
-            <span style="color:rgba(255,255,255,.85);font-size:.75rem;font-weight:600;letter-spacing:.04em;">${sl.badge}</span>
-          </div>
-          <p style="font-size:.7rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:#93c5fd;margin-bottom:.85rem;">${sl.eyebrow}</p>
-          <h1 class="hero-h1" style="font-size:clamp(1.875rem,4vw,3rem);font-weight:800;line-height:1.18;letter-spacing:-.02em;color:#fff;margin-bottom:1.25rem;">${sl.title}</h1>
-          <p class="hero-sub" style="color:rgba(226,232,240,.78);font-size:clamp(.95rem,1.4vw,1.0625rem);font-weight:400;max-width:520px;margin:0 0 2rem;line-height:1.75;word-break:keep-all;">${sl.sub}</p>
-          <div class="hero-cta" style="display:flex;flex-wrap:wrap;gap:.75rem;">
-            <button onclick="${sl.cta1.fn}" class="btn btn-w pglow" style="font-size:.9375rem;font-weight:700;padding:.95rem 1.85rem;">${sl.cta1.t} →</button>
-            <button onclick="${sl.cta2.fn}" class="btn btn-o" style="font-size:.9375rem;font-weight:500;padding:.95rem 1.6rem;">${sl.cta2.t}</button>
-          </div>
-        </div>
-        <!-- RIGHT: trust panel (humanizing — real numbers, not particles) -->
-        <div class="hero-panel" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-radius:1.25rem;padding:1.75rem;box-shadow:0 24px 60px rgba(0,0,0,.35);">
-          <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:1.25rem;">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#93c5fd" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-            <span style="font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#93c5fd;">Why Boanlinks</span>
-          </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem 1rem;">
-            ${sl.panel.map(p=>`<div>
-              <div style="font-size:1.5rem;font-weight:800;color:#fff;letter-spacing:-.02em;line-height:1.1;">${p.k}</div>
-              <div style="font-size:.8125rem;color:rgba(226,232,240,.7);margin-top:.35rem;line-height:1.4;">${p.v}</div>
-            </div>`).join('')}
-          </div>
-          <div style="margin-top:1.5rem;padding-top:1.25rem;border-top:1px solid rgba(255,255,255,.1);display:flex;align-items:center;gap:.5rem;">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-            <span style="font-size:.75rem;color:rgba(226,232,240,.78);font-weight:500;">${sl.pill}</span>
-          </div>
+    return `<div class="hero-slide" style="background:#0a1428;position:relative;">
+      <img src="${sl.img}" alt="" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;">
+      <div style="position:absolute;inset:0;background:linear-gradient(95deg,rgba(8,15,30,.85) 0%,rgba(8,15,30,.65) 45%,rgba(8,15,30,.35) 100%);"></div>
+      <div class="hero-inner" style="position:relative;z-index:1;max-width:1280px;width:100%;margin:0 auto;padding:6rem 2rem 5rem;">
+        <p style="font-size:.75rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:#93c5fd;margin-bottom:1.5rem;">${sl.eyebrow}</p>
+        <h1 class="hero-h1" style="font-size:clamp(2rem,5vw,4rem);font-weight:800;line-height:1.15;letter-spacing:-.03em;color:#fff;margin-bottom:1.5rem;max-width:720px;">${sl.title}</h1>
+        <p class="hero-sub" style="color:rgba(255,255,255,.82);font-size:clamp(.9375rem,1.4vw,1.125rem);font-weight:400;max-width:560px;margin:0 0 2.5rem;line-height:1.75;word-break:keep-all;">${sl.sub}</p>
+        <div class="hero-cta" style="display:flex;flex-wrap:wrap;gap:.75rem;">
+          <button onclick="${sl.cta1.fn}" style="font-size:.9375rem;font-weight:700;padding:1rem 2rem;background:#fff;color:#0a1428;border:none;border-radius:.375rem;cursor:pointer;font-family:inherit;letter-spacing:-.01em;transition:transform .15s,box-shadow .15s;" onmouseover="this.style.transform='translateY(-1px)';this.style.boxShadow='0 8px 24px rgba(255,255,255,.18)'" onmouseout="this.style.transform='';this.style.boxShadow=''">${sl.cta1.t} →</button>
+          <button onclick="${sl.cta2.fn}" style="font-size:.9375rem;font-weight:600;padding:1rem 1.75rem;background:transparent;color:#fff;border:1px solid rgba(255,255,255,.45);border-radius:.375rem;cursor:pointer;font-family:inherit;letter-spacing:-.01em;transition:background .15s,border-color .15s;" onmouseover="this.style.background='rgba(255,255,255,.1)';this.style.borderColor='rgba(255,255,255,.8)'" onmouseout="this.style.background='transparent';this.style.borderColor='rgba(255,255,255,.45)'">${sl.cta2.t}</button>
         </div>
       </div>
     </div>`;
