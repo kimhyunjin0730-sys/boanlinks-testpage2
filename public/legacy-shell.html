@@ -2466,11 +2466,6 @@ function boanlinksDetail(){
         <h2 style="font-size:clamp(1.375rem,2.4vw,1.875rem);font-weight:700;color:#fff;margin-top:.75rem;line-height:1.25;letter-spacing:-.015em;">원스톱 기업 보안 점검 &amp; 보안 제품 매칭 플랫폼</h2>
         <p style="color:rgba(226,232,240,.85);margin-top:1rem;max-width:60rem;line-height:1.8;font-size:.9375rem;">Boanlinks는 웹사이트 · 웹애플리케이션 · 시스템 · 네트워크를 표준 기반으로 종합 점검하고, 기업 환경에 맞는 보안 제품을 매칭해 드리는 원스톱 보안 서비스입니다. (주)진앤현시큐리티가 24년간 축적한 보안 운영 노하우로 운영됩니다.</p>
 
-        <!-- PDF 액션을 히어로 안으로 통합 (스크롤 없이 즉시 노출) -->
-        <div style="display:flex;gap:.625rem;flex-wrap:wrap;margin-top:1.5rem;">
-          <a href="/docs/boanlinks-intro.pdf" target="_blank" rel="noopener" aria-label="소개서 PDF 새 탭에서 열기" style="display:inline-flex;align-items:center;gap:.5rem;padding:.875rem 1.5rem;background:#fff;color:#0f172a;font-weight:700;border-radius:.625rem;text-decoration:none;font-size:.875rem;font-family:'Pretendard',-apple-system,BlinkMacSystemFont,system-ui,sans-serif;">${svg(ico.pdf,16)}소개서 보기 (PDF)</a>
-          <a href="/docs/boanlinks-intro.pdf" download="Boanlinks-소개서.pdf" aria-label="소개서 PDF 다운로드" style="display:inline-flex;align-items:center;gap:.5rem;padding:.875rem 1.5rem;background:rgba(255,255,255,.08);color:#fff;font-weight:600;border-radius:.625rem;text-decoration:none;font-size:.875rem;border:1px solid rgba(255,255,255,.25);font-family:'Pretendard',-apple-system,BlinkMacSystemFont,system-ui,sans-serif;">${svg(ico.download,16)}다운로드</a>
-        </div>
 
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin-top:1.75rem;">
           ${stats.map((s,i)=>`<div style="border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,${i===0?'.10':'.05'});border-radius:1rem;padding:1.25rem;${i===0?`box-shadow:inset 0 0 0 1px ${accent}66;`:''}"><p style="font-size:${i===0?'2rem':'1.75rem'};font-weight:800;color:#fff;line-height:1.1;">${s.v}</p><p style="font-size:.875rem;font-weight:600;color:#fff;margin-top:.5rem;">${s.l}</p><p style="font-size:.7rem;color:rgba(226,232,240,.55);margin-top:.5rem;letter-spacing:.02em;">${s.c}</p></div>`).join('')}
