@@ -2091,14 +2091,13 @@ function pageAbout(){
   const tabs=['사업 소개','서비스','파트너 전략','전문가 팀','연혁'];
   const content=[aboutOverview,aboutServices,aboutStrategy,aboutTeam,aboutHistory][S.aboutTab]();
   return `<div style="min-height:100vh;background:#0b0f1a;">
-  <!-- 검정 헤더 배너 -->
-  <div style="background:#0b0f1a;padding:7.5rem 0 3.5rem;position:relative;overflow:hidden;">
-    <div style="position:absolute;inset:0;background-image:radial-gradient(ellipse 60% 50% at 20% 60%,rgba(37,99,235,.12),transparent),radial-gradient(ellipse 40% 60% at 80% 30%,rgba(99,102,241,.08),transparent);pointer-events:none;"></div>
-    <div style="position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent);"></div>
-    <div class="wrap">
-      <span style="color:rgba(147,197,253,.6);font-size:.75rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;" class="fu">About Boanlinks</span>
-      <h1 style="font-size:clamp(1.25rem,2.2vw,1.75rem);font-weight:500;color:#fff;margin-top:.625rem;line-height:1.1;letter-spacing:-.02em;" class="fu">사업 소개</h1>
-      <p style="color:rgba(226,232,240,.45);margin-top:.875rem;max-width:480px;font-size:.9375rem;line-height:1.75;" class="fu">사이버리스크관리 전문기업 (주)진앤현시큐리티가 운영하는 Boanlinks 플랫폼</p>
+  <!-- phabios-style 풀폭 히어로 -->
+  <div style="position:relative;min-height:380px;background:#0b0f1a url('${SOLS[0].img2}') center/cover no-repeat;overflow:hidden;">
+    <div style="position:absolute;inset:0;background:linear-gradient(95deg,rgba(8,15,30,.92) 0%,rgba(8,15,30,.78) 50%,rgba(8,15,30,.55) 100%);pointer-events:none;"></div>
+    <div class="wrap" style="position:relative;padding:7.5rem 1.5rem 5rem;">
+      <span class="fu" style="color:#93c5fd;font-size:.75rem;font-weight:800;letter-spacing:.22em;text-transform:uppercase;display:block;margin-bottom:1.25rem;">About Boanlinks</span>
+      <h1 class="fu" style="font-size:clamp(2rem,4.5vw,3.25rem);font-weight:800;color:#fff;line-height:1.18;letter-spacing:-.03em;max-width:760px;">사람과 기업을 잇는<br>신뢰의 보안 파트너</h1>
+      <p class="fu" style="color:rgba(226,232,240,.85);margin-top:1.25rem;max-width:560px;font-size:.9375rem;line-height:1.85;font-weight:500;">사이버리스크관리 전문기업 (주)진앤현시큐리티가 운영하는 Boanlinks 플랫폼.</p>
     </div>
   </div>
 
@@ -2349,7 +2348,7 @@ function aboutHistory(){return `<div>
 /* ════════════ SOLUTION (D-GO 상세 섹션 포함) ════════════ */
 /* ════════════ SOLUTION (D-GO 상세 섹션 포함) ════════════ */
 function pageSolution(){const sol=SOLS[S.tab];return `<div style="min-height:100vh;background:#f8fafc;">
-  <section class="dark" class="page-section" style="padding:7rem 0 2.5rem;position:relative;background-image:linear-gradient(rgba(15,23,42,.82),rgba(15,23,42,.9)),url(https://images.unsplash.com/photo-1563986768609-322da13575f3?w=1200&q=72);background-size:cover;background-position:center;"><div class="wrap" style="text-align:center;"><span style="color:#93c5fd;font-size:.8125rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;">Solutions</span><h1 style="font-size:clamp(1.25rem,2.2vw,1.75rem);font-weight:500;color:#fff;margin-top:.75rem;" class="fu">AI 보안링스 솔루션</h1></div></section>
+  <section class="dark page-section" style="position:relative;min-height:360px;background-image:linear-gradient(95deg,rgba(8,15,30,.9) 0%,rgba(8,15,30,.7) 50%,rgba(8,15,30,.45) 100%),url('${sol.img1}');background-size:cover;background-position:center;overflow:hidden;"><div class="wrap" style="position:relative;padding:7rem 1.5rem 4rem;"><span class="fu" style="color:#93c5fd;font-size:.75rem;font-weight:800;letter-spacing:.22em;text-transform:uppercase;display:block;margin-bottom:1.25rem;">Solutions · ${sol.eng}</span><h1 class="fu" style="font-size:clamp(2rem,4.5vw,3.25rem);font-weight:800;color:#fff;line-height:1.18;letter-spacing:-.03em;max-width:760px;">${sol.title}</h1><p class="fu" style="color:rgba(226,232,240,.85);margin-top:1.25rem;max-width:560px;font-size:.9375rem;line-height:1.85;font-weight:500;">${sol.sub}</p></div></section>
   <div style="background:#fff;border-bottom:1px solid var(--bd);position:sticky;top:52px;z-index:40;"><div class="wrap" style="overflow-x:auto;"><div style="display:flex;min-width:max-content;">${SOLS.map((s,i)=>`<button class="stab ${S.tab===i?'on':''}" onclick="S.tab=${i};render();">${s.title}</button>`).join('')}</div></div></div>
   <div class="wrap" style="padding:3.5rem 1.5rem;">
     <div class="g2 fu" style="margin-bottom:4rem;">
@@ -2684,11 +2683,11 @@ function pagePress(){
   </div>`;
 
   return`<div style="min-height:100vh;background:#f8fafc;">
-  <section class="dark" style="padding:7rem 0 3rem;position:relative;background-image:linear-gradient(rgba(15,23,42,.84),rgba(15,23,42,.92)),url(https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=1200&q=72);background-size:cover;background-position:center;">
-    <div class="wrap" style="text-align:center;">
-      <span style="color:#93c5fd;font-size:.8125rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;" class="fu">Press Center</span>
-      <h1 style="font-size:clamp(1.375rem,2.5vw,1.875rem);font-weight:500;color:#fff;margin-top:.75rem;letter-spacing:-.02em;" class="fu">홍보센터</h1>
-      <p style="color:rgba(226,232,240,.6);margin-top:.75rem;" class="fu">AI 보안링스의 최신 뉴스와 보도자료를 확인하세요.</p>
+  <section class="dark" style="position:relative;min-height:360px;background-image:linear-gradient(95deg,rgba(8,15,30,.92) 0%,rgba(8,15,30,.78) 50%,rgba(8,15,30,.55) 100%),url('${SOLS[0].img1}');background-size:cover;background-position:center;overflow:hidden;">
+    <div class="wrap" style="position:relative;padding:7rem 1.5rem 4rem;">
+      <span style="color:#93c5fd;font-size:.75rem;font-weight:800;letter-spacing:.22em;text-transform:uppercase;display:block;margin-bottom:1.25rem;" class="fu">Press Center</span>
+      <h1 style="font-size:clamp(2rem,4.5vw,3.25rem);font-weight:800;color:#fff;line-height:1.18;letter-spacing:-.03em;max-width:760px;" class="fu">최신 뉴스와<br>보도자료</h1>
+      <p style="color:rgba(226,232,240,.85);margin-top:1.25rem;max-width:560px;font-size:.9375rem;line-height:1.85;font-weight:500;" class="fu">AI 보안링스가 만드는 보안의 변화를 가장 먼저 만나보세요.</p>
     </div>
   </section>
   <div style="background:#fff;border-bottom:1px solid var(--bd);position:sticky;top:52px;z-index:40;">
