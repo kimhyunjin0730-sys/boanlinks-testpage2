@@ -18,10 +18,70 @@
    ===================================================== */
 
 :root {
-  --p: #2563eb;
-  --pd: #1d4ed8;
+  /* Brand */
+  --p: #2563eb;          /* primary */
+  --pd: #1d4ed8;         /* primary-dark */
+  --ps: #3b82f6;         /* primary-soft (was #60a5fa, #38bdf8 inconsistencies) */
+  --p-tint: rgba(37,99,235,.10);
+
+  /* Surfaces */
   --navy: #0f172a;
+  --navy-2: #1e293b;
+  --bg: #f8fafc;
   --bd: #e2e8f0;
+
+  /* Text */
+  --fg: #0f172a;
+  --muted: #475569;
+  --muted-2: #64748b;
+
+  /* Status */
+  --err: #dc2626;
+  --ok: #10b981;
+  --warn: #d97706;
+
+  /* Layout */
+  --header-h: 60px;
+  --radius-sm: .625rem;
+  --radius: 1rem;
+  --radius-lg: 1.5rem;
+  --shadow-card: 0 1px 8px rgba(0,0,0,.04);
+  --shadow-cta: 0 4px 12px rgba(37,99,235,.25);
+
+  /* Type */
+  --fs-h1: clamp(1.5rem, 3vw, 2.25rem);
+  --fs-h2: clamp(1.25rem, 2.2vw, 1.5rem);
+  --fs-h3: 1.125rem;
+  --fs-body: .9375rem;
+  --fs-sm: .875rem;
+  --fs-xs: .75rem;
+}
+
+/* a11y: keyboard focus — was completely missing */
+*:focus { outline: none; }
+*:focus-visible {
+  outline: 2px solid var(--p);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* a11y: respect reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* a11y: visually hidden helper for screen-reader-only labels */
+.sr-only {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0);
+  white-space: nowrap; border: 0;
 }
 
 *, *::before, *::after {
@@ -780,6 +840,63 @@ section.dark .dev-card p,
   .bl-seg-cards { display: flex !important; }
 }
 
+/* ─────────────────────────────────────────────────────────
+   Extracted component classes (전체 페이지 공통)
+   ───────────────────────────────────────────────────────── */
+.eyebrow {
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--p);
+}
+.eyebrow.on-dark { color: #93c5fd; }
+.eyebrow.danger { color: var(--err); }
+
+.card-light {
+  background: #fff;
+  border: 1px solid var(--bd);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-card);
+}
+
+/* Press: featured 카드 모바일 1열 reflow */
+@media (max-width: 768px) {
+  .press-featured-card { grid-template-columns: 1fr !important; min-height: auto !important; }
+  .press-nav-grid { grid-template-columns: 1fr !important; }
+}
+
+/* About: 모바일에서 사이드바 가로 스와이프, 콘텐츠 1열 */
+@media (max-width: 900px) {
+  .about-layout { grid-template-columns: 1fr !important; }
+  .about-side {
+    position: static !important;
+    border-right: none !important;
+    border-bottom: 1px solid rgba(255,255,255,.07);
+    padding: 1rem 0 !important;
+  }
+  .about-side nav[role="tablist"] {
+    flex-direction: row !important;
+    overflow-x: auto;
+    flex-wrap: nowrap !important;
+    scrollbar-width: thin;
+  }
+  .about-side nav[role="tablist"] button { white-space: nowrap; }
+}
+
+/* Home: 모바일에서 캔버스 배경 비활성 (성능 + 가독성) */
+@media (max-width: 768px) {
+  canvas#quantum-bg, canvas#security-canvas, canvas#vault-canvas, canvas#trust-canvas {
+    display: none !important;
+  }
+}
+
+/* Form a11y: aria-invalid 시각적 표시 */
+input[aria-invalid="true"], textarea[aria-invalid="true"], select[aria-invalid="true"] {
+  border-color: var(--err) !important;
+}
+
 /* ───────────────────────────────────────
    Animations
 ─────────────────────────────────────── */
@@ -1149,6 +1266,19 @@ async function loadPress() {
 function getPath(){const h=window.location.hash;if(!h||h==='#'||h==='#/')return'/';return h.replace(/^#/,'').split('?')[0]||'/';}
 function go(path){const c=getPath();window.location.hash=path;if(c===path){S.path=path;render();window.scrollTo(0,0);}closeDd();if(S.mobOpen)toggleMob();}
 function goSol(i){S.tab=i;go('/solution');}
+// a11y: ←/→/Home/End 키로 About 탭 이동
+document.addEventListener('keydown',(e)=>{
+  const tab=e.target.closest && e.target.closest('[role="tab"]');
+  if(!tab) return;
+  const list=Array.from(document.querySelectorAll('[role="tablist"] [role="tab"]'));
+  const idx=list.indexOf(tab); if(idx<0) return;
+  let next=-1;
+  if(e.key==='ArrowRight'||e.key==='ArrowDown') next=(idx+1)%list.length;
+  else if(e.key==='ArrowLeft'||e.key==='ArrowUp') next=(idx-1+list.length)%list.length;
+  else if(e.key==='Home') next=0;
+  else if(e.key==='End') next=list.length-1;
+  if(next>=0){ e.preventDefault(); S.aboutTab=next; render(); setTimeout(()=>{const el=document.getElementById('about-tab-'+next); if(el) el.focus();},0); }
+});
 window.addEventListener('hashchange',()=>{S.path=getPath();window.scrollTo(0,0);render();});
 
 /* ═══ 드롭다운 (click방식) ═══ */
@@ -1605,15 +1735,15 @@ function footerHTML(){
       <!-- 지도 -->
       <div>
         <h4 style="color:#fff;font-size:.875rem;font-weight:700;margin-bottom:.875rem;">오시는 길</h4>
-        <div style="border-radius:.75rem;overflow:hidden;margin-bottom:.625rem;"><iframe src="https://maps.google.com/maps?q=경기도+하남시+미사대로+540+현대지식산업센터+한강미사2차+비동+614호&t=&z=17&ie=UTF8&iwloc=&output=embed" width="100%" height="200" style="border:0;display:block;border-radius:.5rem;" loading="lazy" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe></div>
+        <div style="border-radius:.75rem;overflow:hidden;margin-bottom:.625rem;aspect-ratio:16/9;"><iframe title="AI 보안링스 본사 위치" src="https://maps.google.com/maps?q=경기도+하남시+미사대로+540+현대지식산업센터+한강미사2차+비동+614호&t=&z=17&ie=UTF8&iwloc=&output=embed" style="border:0;display:block;width:100%;height:100%;border-radius:.5rem;" loading="lazy" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe></div>
         <p style="color:rgba(226,232,240,.5);font-size:.75rem;line-height:1.5;">경기 하남시 미사대로 540<br>현대지식산업센터 한강미사2차 비동 614호</p>
       </div>
     </div>
     <!-- 하단 바 -->
     <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:1rem;padding:1rem 0;">
-      <span style="color:rgba(226,232,240,.3);font-size:.75rem;">Copyright © AI 보안링스 All rights reserved.</span>
+      <span style="color:rgba(226,232,240,.3);font-size:.75rem;">Copyright © <span id="footer-year"></span> AI 보안링스 All rights reserved.</span>
       <div style="position:relative;" id="fc">
-        <button id="fb" style="display:flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);border-radius:.5rem;padding:.5rem 1.1rem;color:rgba(226,232,240,.65);font-size:.75rem;cursor:pointer;font-family:'Pretendard',-apple-system,BlinkMacSystemFont,system-ui,sans-serif;">패밀리 사이트<svg id="fchev" width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="transition:transform .2s;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></button>
+        <button id="fb" aria-haspopup="true" aria-expanded="false" aria-controls="fm" style="display:flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);border-radius:.5rem;padding:.5rem 1.1rem;color:rgba(226,232,240,.65);font-size:.75rem;cursor:pointer;font-family:'Pretendard',-apple-system,BlinkMacSystemFont,system-ui,sans-serif;">패밀리 사이트<svg id="fchev" width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="transition:transform .2s;" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></button>
         <div id="fm" style="display:none;position:absolute;bottom:calc(100% + 6px);right:0;min-width:175px;background:#1e293b;border:1px solid rgba(255,255,255,.12);border-radius:.625rem;overflow:hidden;box-shadow:0 16px 40px rgba(0,0,0,.35);z-index:50;">
           <a href="https://jinnhyunsecurity.com/" target="_blank" rel="noopener" class="flink">(주)진앤현시큐리티</a>
           <a href="https://www.rtruesoft.kr/" target="_blank" rel="noopener" class="flink">(주)리턴트루</a>
@@ -1645,13 +1775,19 @@ function render(){
   else app.innerHTML=page404();
   // footer 렌더
   document.getElementById('footer-area').innerHTML=footerHTML();
+  const yr=document.getElementById('footer-year');if(yr)yr.textContent=new Date().getFullYear();
   updateHdr();
   setTimeout(()=>{initAnim();bindForm();bindChat();bindFooterFam();if(S.path==='/')startSlide();},30);
 }
 function bindFooterFam(){
   const fb=document.getElementById('fb');
   if(!fb)return;
-  fb.addEventListener('click',()=>{S.famOpen=!S.famOpen;document.getElementById('fm').style.display=S.famOpen?'block':'none';document.getElementById('fchev').style.transform=S.famOpen?'rotate(180deg)':'';});
+  fb.addEventListener('click',()=>{
+    S.famOpen=!S.famOpen;
+    document.getElementById('fm').style.display=S.famOpen?'block':'none';
+    document.getElementById('fchev').style.transform=S.famOpen?'rotate(180deg)':'';
+    fb.setAttribute('aria-expanded',String(S.famOpen));
+  });
 }
 
 /* ════════════ HOME ════════════ */
@@ -1884,11 +2020,11 @@ function pageAbout(){
       <div style="display:grid;grid-template-columns:180px 1fr;gap:0;align-items:start;" class="about-layout">
 
         <!-- 왼쪽 사이드 메뉴 (sticky) -->
-        <div style="position:sticky;top:60px;padding:3rem 1.25rem 3rem 0;border-right:1px solid rgba(255,255,255,.07);">
-          <nav style="display:flex;flex-direction:column;gap:.125rem;">
+        <div class="about-side" style="position:sticky;top:60px;padding:3rem 1.25rem 3rem 0;border-right:1px solid rgba(255,255,255,.07);">
+          <nav role="tablist" aria-label="회사소개 섹션" style="display:flex;flex-direction:column;gap:.125rem;">
             ${tabs.map((t,i)=>`
-            <button onclick="S.aboutTab=${i};render();" style="display:flex;align-items:center;gap:.625rem;padding:.75rem .875rem;border-radius:.5rem;border:none;cursor:pointer;font-family:'Pretendard',-apple-system,BlinkMacSystemFont,system-ui,sans-serif;font-size:.8125rem;letter-spacing:-.01em;text-align:left;transition:all .15s;background:${S.aboutTab===i?'rgba(255,255,255,.08)':'transparent'};color:${S.aboutTab===i?'#fff':'#64748b'};">
-              <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="${S.aboutTab===i?'#60a5fa':'#475569'}" style="flex-shrink:0;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+            <button role="tab" id="about-tab-${i}" aria-selected="${S.aboutTab===i}" aria-controls="about-panel" tabindex="${S.aboutTab===i?'0':'-1'}" onclick="S.aboutTab=${i};render();" style="display:flex;align-items:center;gap:.625rem;padding:.75rem .875rem;border-radius:.5rem;border:none;cursor:pointer;font-family:'Pretendard',-apple-system,BlinkMacSystemFont,system-ui,sans-serif;font-size:.8125rem;letter-spacing:-.01em;text-align:left;transition:all .15s;background:${S.aboutTab===i?'rgba(255,255,255,.08)':'transparent'};color:${S.aboutTab===i?'#fff':'#64748b'};">
+              <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="${S.aboutTab===i?'var(--ps)':'#475569'}" style="flex-shrink:0;" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
               <span style="font-weight:${S.aboutTab===i?'600':'400'};">${t}</span>
             </button>`).join('')}
           </nav>
@@ -1907,7 +2043,7 @@ function pageAbout(){
         </div>
 
         <!-- 오른쪽 콘텐츠 -->
-        <div style="padding:3rem 0 5rem 3rem;background:#0b0f1a;" class="about-content">
+        <div id="about-panel" role="tabpanel" aria-labelledby="about-tab-${S.aboutTab}" tabindex="0" style="padding:3rem 0 5rem 3rem;background:#0b0f1a;" class="about-content">
           ${content}
         </div>
 
@@ -2478,7 +2614,7 @@ function pagePress(){
   <div class="wrap" style="padding:3rem 1.5rem 4rem;">
     ${items.length===0?`<div style="text-align:center;padding:5rem;color:#4b5563;"><p>해당 카테고리의 기사가 없습니다.</p></div>`:`
     ${isFirst&&items.length>0?`
-      <div class="press-card fu" onclick="goToPress(${items[0].id})" style="margin-bottom:2.5rem;display:grid;grid-template-columns:1fr 1fr;min-height:280px;border-radius:1.25rem;overflow:hidden;">
+      <div class="press-card press-featured-card fu" onclick="goToPress(${items[0].id})" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();goToPress(${items[0].id});}" aria-label="기사 보기: ${items[0].title.replace(/"/g,'&quot;')}" style="margin-bottom:2.5rem;display:grid;grid-template-columns:1fr 1fr;min-height:280px;border-radius:1.25rem;overflow:hidden;cursor:pointer;">
         <div style="position:relative;min-height:220px;overflow:hidden;background:linear-gradient(135deg,#0f172a 0%,#1e40af 100%);">
           ${items[0].img
             ? `<img src="${items[0].img}" alt="${items[0].title}" style="width:100%;height:100%;object-fit:cover;display:block;">`
@@ -2522,14 +2658,16 @@ function pageContact(){
   </div>`;
 
   const f=S.form,e=S.errs;
-  const em=k=>e[k]?`<div class="emsg"><svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>${e[k]}</div>`:'';
-  const rq=`<span style="color:#f87171;margin-left:.2em;">*</span>`;
+  const em=k=>e[k]?`<div class="emsg" id="err-${k}" role="alert"><svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>${e[k]}</div>`:'';
+  const rq=`<span style="color:var(--err);margin-left:.2em;" aria-hidden="true">*</span>`;
+  // a11y: 에러 시 aria-invalid + aria-describedby로 SR이 에러 메시지를 읽음
+  const a11y=k=>`aria-required="true" ${e[k]?`aria-invalid="true" aria-describedby="err-${k}"`:''}`;
 
   return`
   <div class="contact-shell">
     <div class="contact-hero-bar">
       <div class="wrap" style="max-width:1100px;">
-        <span style="font-size:.6875rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#38bdf8;" class="fu">Contact Us</span>
+        <span style="font-size:.6875rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#93c5fd;" class="fu">Contact Us</span>
         <h1 style="font-size:clamp(1.5rem,3vw,2.25rem);font-weight:700;color:#f0f6ff;margin-top:.5rem;margin-bottom:.375rem;line-height:1.2;" class="fu">문의하기</h1>
         <p style="color:rgba(148,163,184,.7);font-size:.9375rem;" class="fu">보안 솔루션 도입 문의, 견적, 기술 상담까지 — 빠르게 답변드립니다.</p>
       </div>
@@ -2564,23 +2702,23 @@ function pageContact(){
         </div>
 
         <div class="fg">
-          <div class="ff"><label>회사명 ${rq}</label><input type="text" id="fc-co" value="${f.company}" placeholder="AI 보안링스" class="${e.company?'err':''}">${em('company')}</div>
-          <div class="ff"><label>업종</label><select id="fc-biz"><option value="">선택</option>${['IT/소프트웨어|IT','제조업|제조','금융/보험|금융','유통/물류|유통','의료/바이오|의료','교육|교육','공공/기관|공공','기타|기타'].map(o=>{const[l,v]=o.split('|');return`<option value="${v}" ${f.biz===v?'selected':''}>${l}</option>`;}).join('')}</select></div>
+          <div class="ff"><label for="fc-co">회사명 ${rq}</label><input type="text" id="fc-co" value="${f.company}" placeholder="AI 보안링스" class="${e.company?'err':''}" ${a11y('company')}>${em('company')}</div>
+          <div class="ff"><label for="fc-biz">업종</label><select id="fc-biz"><option value="">선택</option>${['IT/소프트웨어|IT','제조업|제조','금융/보험|금융','유통/물류|유통','의료/바이오|의료','교육|교육','공공/기관|공공','기타|기타'].map(o=>{const[l,v]=o.split('|');return`<option value="${v}" ${f.biz===v?'selected':''}>${l}</option>`;}).join('')}</select></div>
         </div>
 
         <div class="fg">
-          <div class="ff" style="grid-column:1/-1;"><label>담당자 성명 / 직책 ${rq}</label><input type="text" id="fc-namepos" value="${f.namepos}" placeholder="홍길동 / 과장" class="${e.namepos?'err':''}">${em('namepos')}</div>
+          <div class="ff" style="grid-column:1/-1;"><label for="fc-namepos">담당자 성명 / 직책 ${rq}</label><input type="text" id="fc-namepos" value="${f.namepos}" placeholder="홍길동 / 과장" class="${e.namepos?'err':''}" ${a11y('namepos')}>${em('namepos')}</div>
         </div>
 
         <div class="fg">
-          <div class="ff"><label>연락처 ${rq}</label><input type="tel" id="fc-phone" value="${f.phone}" placeholder="010-1234-5678" class="${e.phone?'err':''}">${em('phone')}</div>
-          <div class="ff"><label>업무용 이메일 ${rq}</label><input type="email" id="fc-email" value="${f.email}" placeholder="you@company.com" class="${e.email?'err':''}">${em('email')}</div>
+          <div class="ff"><label for="fc-phone">연락처 ${rq}</label><input type="tel" id="fc-phone" value="${f.phone}" placeholder="010-1234-5678" class="${e.phone?'err':''}" ${a11y('phone')}>${em('phone')}</div>
+          <div class="ff"><label for="fc-email">업무용 이메일 ${rq}</label><input type="email" id="fc-email" value="${f.email}" placeholder="you@company.com" class="${e.email?'err':''}" ${a11y('email')}>${em('email')}</div>
         </div>
 
         <div class="ff" style="margin-bottom:1.5rem;">
-          <label>문의내용 ${rq}</label>
-          <textarea id="fc-msg" rows="5" placeholder="문의하실 내용을 1000자 이내로 작성해주세요." class="${e.msg?'err':''}">${f.msg}</textarea>
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:.375rem;">${em('msg')}<span style="font-size:.75rem;color:#1f2937;margin-left:auto;font-weight:500;">${f.msg.length} / 1000</span></div>
+          <label for="fc-msg">문의내용 ${rq}</label>
+          <textarea id="fc-msg" rows="5" maxlength="1000" placeholder="문의하실 내용을 1000자 이내로 작성해주세요." class="${e.msg?'err':''}" ${a11y('msg')} aria-describedby="${e.msg?'err-msg ':''}msg-counter">${f.msg}</textarea>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:.375rem;">${em('msg')}<span id="msg-counter" aria-live="polite" style="font-size:.75rem;color:${f.msg.length>900?'var(--err)':'#1f2937'};margin-left:auto;font-weight:500;">${f.msg.length} / 1000</span></div>
         </div>
 
         <div class="privacy-box">
@@ -2616,7 +2754,28 @@ function pageContact(){
     </div>
   </div>`;}
 
-function page404(){return`<div style="min-height:80vh;display:flex;align-items:center;justify-content:center;text-align:center;"><div><h1 style="font-size:4rem;font-weight:700;color:#0f172a;">404</h1><p style="color:#64748b;margin:.75rem 0 1.5rem;">페이지를 찾을 수 없습니다</p><button onclick="go('/')" class="btn btn-p">홈으로 돌아가기</button></div></div>`;}
+function page404(){
+  const links=[
+    {label:'회사소개',path:'/about',desc:'AI 보안링스가 누구인지'},
+    {label:'솔루션',path:'/solution',desc:'5종 보안 솔루션 둘러보기'},
+    {label:'홍보센터',path:'/press',desc:'최신 뉴스·보도자료'},
+    {label:'문의하기',path:'/contact',desc:'무료 진단·상담 신청'},
+  ];
+  return `<div style="min-height:80vh;display:flex;align-items:center;justify-content:center;padding:5rem 1.5rem;background:var(--bg);">
+    <div style="max-width:640px;width:100%;text-align:center;">
+      <p class="eyebrow" style="color:var(--p);">Error 404</p>
+      <h1 style="font-size:clamp(2.5rem,6vw,4rem);font-weight:800;color:var(--fg);margin-top:.5rem;letter-spacing:-.02em;line-height:1;">페이지를 찾을 수 없어요</h1>
+      <p style="color:var(--muted);margin-top:1rem;font-size:1rem;line-height:1.7;">요청하신 주소가 변경되었거나 더 이상 존재하지 않을 수 있습니다.<br>아래에서 원하시는 정보를 찾아보세요.</p>
+      <div style="margin-top:2rem;display:flex;gap:.625rem;flex-wrap:wrap;justify-content:center;">
+        <button onclick="go('/')" class="btn btn-p">← 홈으로 돌아가기</button>
+        <button onclick="go('/contact')" class="btn btn-o" style="border-color:var(--bd);color:var(--fg);">도움 요청</button>
+      </div>
+      <div style="margin-top:3rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:.75rem;text-align:left;">
+        ${links.map(l=>`<button onclick="go('${l.path}')" style="background:#fff;border:1px solid var(--bd);border-radius:var(--radius);padding:1rem 1.125rem;cursor:pointer;font-family:inherit;text-align:left;transition:transform .15s, box-shadow .15s, border-color .15s;" onmouseover="this.style.transform='translateY(-2px)';this.style.borderColor='var(--p)';this.style.boxShadow='var(--shadow-cta)';" onmouseout="this.style.transform='';this.style.borderColor='var(--bd)';this.style.boxShadow='';"><p style="font-weight:700;color:var(--fg);font-size:.9375rem;">${l.label} →</p><p style="color:var(--muted-2);font-size:.8125rem;margin-top:.25rem;">${l.desc}</p></button>`).join('')}
+      </div>
+    </div>
+  </div>`;
+}
 
 window.addEventListener('DOMContentLoaded', ()=>{
   S.path=getPath();
